@@ -1,0 +1,57 @@
+<h2> User login </h2>
+<p> <?php echo $message; ?></p>
+
+<section class="login">
+
+<h2>Login</h2>
+<?php if ($this->error): ?>
+	<p class="error">
+		There were one or more issues with your submission. Please correct them as indicated below.
+	</p>
+<?php endif ?>
+
+<?php
+	$form = $this->form;
+	$form->prepare();
+	$form->setAttribute('action', $this->url(NULL, array('controller'=>'users', 'action' => 'loginprocess')));
+	$form->setAttribute('method', 'post');
+	echo $this->form()->openTag($form);
+?>
+
+<dl class="zend_form">
+	<dt>
+		<?php echo $this->formLabel($form->get('email')); ?>
+	</dt>
+	<dd>
+		<?php
+			echo $this->formElement($form->get('email'));
+			echo $this->formElementErrors($form->get('email'));
+		?>
+	</dd>
+	<dt>
+		<?php echo $this->formLabel($form->get('password'));?>
+	</dt>
+	<dd>
+		<?php
+			echo $this->formElement($form->get('password'));
+			echo $this->formElementErrors($form->get('password'));
+		?>
+	</dd>
+	<dd><br/></dd>
+	<dd>
+		<?php
+			echo $this->formElement($form->get('submit'));
+			echo $this->formElementErrors($form->get('submit'));
+		?>
+	</dd>
+    <dd><br/></dd>
+	<dd>
+        <?php echo $this->formElement($form->get('rem_me')) . '&nbsp;' . $this->formLabel($form->get('rem_me'));?> &nbsp;
+        <a href="/users/fgotpassword">Forgot Password?</a>
+    </dd>
+</dl>
+
+<?php echo $this->form()->closeTag() ?>
+
+</section>
+<a href="/users"><< Back to Home</a>

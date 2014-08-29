@@ -1,0 +1,12 @@
+<section class="login-confirm">
+<h2>Login Successful</h2>	
+<p> Welcome! <?php echo $this->dataArr['name']; ?></p>
+<p>
+    <?php
+        echo "<pre>";
+        print_r($this->dataArr);
+        echo "</pre>";
+    ?> 
+</p>
+</section>
+<p><a href="/users/logout">Logout</a></p>
