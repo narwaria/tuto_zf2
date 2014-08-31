@@ -17,10 +17,10 @@ class CategoryTable extends AbstractTableGateway
     protected $table = 'tbl_category';
     public function __construct(Adapter $adapter) {
         $this->adapter = $adapter;
-        $this->resultSetPrototype = new ResultSet();
-        $this->resultSetPrototype->setArrayObjectPrototype(new Category());
+       // $this->resultSetPrototype = new ResultSet();
+       // $this->resultSetPrototype->setArrayObjectPrototype(new Category());
         
-        $this->initialize();
+      //  $this->initialize();
     }
 
     public function fetchAll(Select $select = null) {

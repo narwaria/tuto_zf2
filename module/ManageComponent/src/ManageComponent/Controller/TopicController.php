@@ -8,11 +8,10 @@ use ManageComponent\Model\Topic;
 use ManageComponent\Form\TopicForm;
 use ManageComponent\Form\TopicFormSearch;
 
-
 class TopicController extends AbstractActionController
 {
-	protected $topicTable;	
-
+    protected $topicTable; 
+    protected $technologyTable;	
     public function indexAction()
     {
     	$this->layout('layout/dashboard');
@@ -31,16 +30,28 @@ class TopicController extends AbstractActionController
 
     public function addAction()
     {
-    	$this->layout('layout/dashboard'); // 
-    	$TopicForm = new TopicForm();
-        $request = $this->getRequest();        
-        if ($request->isPost()) {            
+        $this->layout('layout/dashboard'); //  Set the layout        
+        $technologiesValues = $this->getTechnologyTable()->fetchAll(); // get the technology names
+        $technologyArray=array();
+        foreach($technologiesValues as  $technology){
+            $technologyArray[$technology["id"]]=$technology["technology"];        
+        }    	 
+    	$TopicForm = new TopicForm();              
+        $TopicForm->get('technologies')->setValueOptions($technologyArray);
+        $request = $this->getRequest();   
+       
+        if ($request->isPost()) {
             $topic = new Topic();            
             $TopicForm->setInputFilter($topic->getInputFilter());
             $TopicForm->setData($request->getPost());            
             if ($TopicForm->isValid()) {
                 $topic->exchangeArray($TopicForm->getData());
                 $this->getTopicTable()->saveTopic($topic);
+                /* @var $lastInsertTopicID Topic */
+                $lastInsertTopicID = $this->getTopicTable()->lastInsertValue;
+                foreach($request->getPost()->technologies as $technologyID){
+                    $this->getTopicTable()->saveTopicTechnologyRelation($lastInsertTopicID,$technologyID);
+                }
                 // Redirect to list of topic
                 return $this->redirect()->toRoute('topic');
             }
@@ -64,9 +75,16 @@ class TopicController extends AbstractActionController
         if (!$this->topicTable) {            
             $sm = $this->getServiceLocator();          
             $this->topicTable = $sm->get('ManageComponent\Model\TopicTable');
-        }        
+        }
         return $this->topicTable;
     }
-
+    public function getTechnologyTable()
+    {       
+        if (!$this->technologyTable) {            
+            $sm = $this->getServiceLocator();          
+            $this->technologyTable = $sm->get('ManageComponent\Model\TechnologyTable');           
+        }
+        return $this->technologyTable;
+    }
 }
 

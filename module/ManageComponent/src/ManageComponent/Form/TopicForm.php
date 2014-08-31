@@ -1,7 +1,6 @@
 <?php
 // module/ManageComponent/src/ManageComponent/Form/TopicForm.php:
 namespace ManageComponent\Form;
-
 use Zend\Form\Form;
 
 class TopicForm extends Form {
@@ -27,7 +26,15 @@ class TopicForm extends Form {
             'options' => array(
                 //'label' => 'Topic Name',
             ),
-        ));         
+        ));
+        $this->add(array(
+             'type' => 'Zend\Form\Element\MultiCheckbox',
+             'name' => 'technologies',
+             'options' => array(
+                    // 'label' => 'What do you like ?',
+                     'value_options' => array(),
+             )
+     ));
         $this->add(array(
             'name' => 'submit',
             'attributes' => array(

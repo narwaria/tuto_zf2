@@ -3,7 +3,7 @@ namespace TopicManagement;
 return array(
     'controllers' => array(
         'invokables' => array(
-            'ManageComponent\Controller\Topic' 			=>	'ManageComponent\Controller\TopicController',
+            'ManageComponent\Controller\Topic' 		=>	'ManageComponent\Controller\TopicController',
             'ManageComponent\Controller\Department' 	=>	'ManageComponent\Controller\DepartmentController',
             'ManageComponent\Controller\Designation' 	=>	'ManageComponent\Controller\DesignationController',
             'ManageComponent\Controller\Technology' 	=>	'ManageComponent\Controller\TechnologyController',

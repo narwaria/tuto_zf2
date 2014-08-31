@@ -7,12 +7,18 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Insert;
+use Zend\Db\Sql\Sql;
 
 
 class TopicTable extends AbstractTableGateway 
 {
     protected $tableGateway;
-    protected $table = 'tbl_topic';
+    protected $table = 'tbl_topic'; 
+    protected $topicCategoryRelationTable= 'tbl_topic_category_relation';
+    protected $adapter;
+
+
     public function __construct(Adapter $adapter) {
         $this->adapter = $adapter;
         //$this->resultSetPrototype = new ResultSet();
@@ -72,5 +78,15 @@ class TopicTable extends AbstractTableGateway
             $resultSet = $this->selectWith($select);
             $rowset=$resultSet->current();             
             return $rowset["topics_count"];
+    }
+    public function saveTopicTechnologyRelation($topic_id=null, $tech_id=null){            
+            $sql        =   new Sql($this->adapter);
+            $insert     =   new Insert("tbl_topic_category_relation");
+            $insert->values(array('topic_id'=>(int)$topic_id,'tech_id'=>(int)$tech_id));             
+            $selectString = $sql->getSqlStringForSqlObject($insert);           
+            $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+    }
+    public function getlistdata(){
+        return array("1"=>"Helo","2"=>"hi");
     }
 }
