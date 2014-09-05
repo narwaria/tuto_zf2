@@ -4,24 +4,21 @@ namespace Users;
 return array(
     'controllers' => array(
         'invokables' => array(            
-            'Users' => 'Users\Controller\UsersController',
+            'Users\Controller\Users' => 'Users\Controller\UsersController',
         ),
     ),
     'router' => array(        
         'routes' => array(
-
-
-            
             'users' => array(
                 'type' => 'segment',               
                 'options' => array(
-                    'route' => '/[:controller][/:action][/:id]',
+                    'route' => '[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id' => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Users',
+                        'controller' => 'Users\Controller\Users',
                         'action' => 'index',
                     ),
                 ),

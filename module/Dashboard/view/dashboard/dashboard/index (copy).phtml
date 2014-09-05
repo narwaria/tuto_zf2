@@ -1,0 +1,46 @@
+
+
+<h1>DASHBOARD</h1>
+
+
+<div class="col-sm-6">
+	<h3>Manage User</h3>
+	<ul>
+		<li>Human Resource (0)</li>
+		<li>IT Department (0)</li>
+		<li>Finance (0)</li>
+		<li>Support (0)</li>
+	</ul>
+</div>
+
+
+<div class="col-sm-6">
+	<h3>Manage Component</h3>
+	<ul>
+		<?php foreach($this->components as $componentName => $componentValue) : ?>
+		<?php echo "<li>{$componentName} ({$componentValue})</li>"; ?>
+		<?php endforeach; ?>
+	</ul>
+</div>
+
+<div class="col-sm-6">
+	<h3>Interview [Last 30 days]</h3>
+	<ul>
+		<li>Interview Sent (0)</li>
+		<li>Interview Complete (0)</li>
+		<li>Interview Pending (0)</li>		
+	</ul>
+</div>
+
+<div class="col-sm-6">
+	<h3>Question Bank</h3>
+	<?php if($this->topics->count()!==0) : ?>
+	<ul>		
+		<?php foreach ($this->topics as $topic) : // print_r($topic);  ?>
+		 <?php echo "<li>$topic->topic_name  (0)</li>"; ?>
+		<?php endforeach; ?>		
+	</ul>
+	<?php else: ?>
+		<p>No record found</p>
+	<?php endif; ?>
+</div>

@@ -1,46 +1,67 @@
 
-
-<h1>DASHBOARD</h1>
-
-
-<div class="col-sm-6">
-	<h3>Manage User</h3>
-	<ul>
-		<li>Human Resource (0)</li>
-		<li>IT Department (0)</li>
-		<li>Finance (0)</li>
-		<li>Support (0)</li>
-	</ul>
-</div>
-
-
-<div class="col-sm-6">
-	<h3>Manage Component</h3>
-	<ul>
-		<?php foreach($this->components as $componentName => $componentValue) : ?>
-		<?php echo "<li>{$componentName} ({$componentValue})</li>"; ?>
-		<?php endforeach; ?>
-	</ul>
-</div>
-
-<div class="col-sm-6">
-	<h3>Interview [Last 30 days]</h3>
-	<ul>
-		<li>Interview Sent (0)</li>
-		<li>Interview Complete (0)</li>
-		<li>Interview Pending (0)</li>		
-	</ul>
-</div>
-
-<div class="col-sm-6">
-	<h3>Question Bank</h3>
-	<?php if($this->topics->count()!==0) : ?>
-	<ul>		
-		<?php foreach ($this->topics as $topic) : // print_r($topic);  ?>
-		 <?php echo "<li>$topic->topic_name  (0)</li>"; ?>
-		<?php endforeach; ?>		
-	</ul>
-	<?php else: ?>
-		<p>No record found</p>
-	<?php endif; ?>
-</div>
+      <h1 class="page-title">Dashboard</h1>
+      <div class="page-bar">
+        <ul class="page-breadcrumb">
+          <li><i class="fa fa-home"></i><a href="#">Home</a><i class="fa fa-angle-right"></i></li>
+          <li>Dashboard</li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <div class="io-db-block">
+            <div class="io-db-block-header">Manage User</div>
+            <div class="io-db-block-content">
+              <ul>
+                <li><a href="#">Human Resource (10)</a></li>
+                <li><a href="#">IT Department (8)</a></li>
+                <li><a href="#">Finance (4)</a></li>
+                <li><a href="#">Support (3)</a></li>
+              </ul>
+            </div>
+            <div class="io-db-block-footer"><a href="#">view more</a></div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <div class="io-db-block">
+            <div class="io-db-block-header">Manage Components</div>
+            <div class="io-db-block-content">
+              <ul>
+                <?php foreach($this->components as $componentName => $componentValue) : ?>
+                <?php echo "<li><a href='#'>{$componentName} ({$componentValue})</a></li>"; ?>
+                <?php endforeach; ?>               
+              </ul>
+            </div>
+            <div class="io-db-block-footer"><a href="#">view more</a></div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <div class="io-db-block">
+            <div class="io-db-block-header">Interview Statistics ( Last 30 days )</div>
+            <div class="io-db-block-content">
+              <ul>
+                <li><a href="#">Interview Sent (500)</a></li>
+                <li><a href="#">Interview Completed (350)</a></li>
+                <li><a href="#">Interview Pending (150)</a></li>
+              </ul>
+            </div>
+            <div class="io-db-block-footer"><a href="#">view more</a></div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <div class="io-db-block">
+            <div class="io-db-block-header">Question Bank</div>
+            <div class="io-db-block-content">
+              <ul>
+                <?php if($this->topics->count()!==0) : ?>
+                <?php foreach ($this->topics as $topic) : // print_r($topic);  ?>
+                  <?php echo "<li><a href=''>{$topic->topic_name}  (0)</a></li>"; ?>
+                <?php endforeach; ?>
+                <?php else: ?>
+                  <li>No record found</li>
+                <?php endif; ?>
+              </ul>
+            </div>
+            <div class="io-db-block-footer"><a href="#">view more</a></div>
+          </div>
+        </div>
+      </div>

@@ -20,7 +20,7 @@ class TopicFormSearch extends Form
                 'label' => 'Topic Name',
             ),
         ));
-        $this->add(array(
+        /* $this->add(array(
             'name' => 'topic_description',
             'attributes' => array(
                 'type'  => 'text',
@@ -28,7 +28,7 @@ class TopicFormSearch extends Form
             'options' => array(
                 'label' => 'Topic Description',
             ),
-        ));  
+        ));  */
         $this->add(array(
             'name' => 'submit',
             'attributes' => array(

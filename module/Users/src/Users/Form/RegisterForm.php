@@ -15,26 +15,54 @@ class RegisterForm extends Form {
 			'name' => 'name',
 			'attributes' => array(
 				'type' => 'text',
-				'required' => 'required'
+				'required' => 'required',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"First Name *",
 			),
 			'options' => array(
-				'label' => 'Full Name',
+				'label' => 'First Name',
 			),
 			'validators' => array(array(
 				'name' => 'StringLength',
 				'options' => array(
 					'encoding' => 'UTF-8',
-					'min'      => 5,
+					'min'      => 2,
 					'max'      => 50,
 				)
 			))
 		));
+
+		$this->add(array(
+			'name' => 'lname',
+			'attributes' => array(
+				'type' => 'text',
+				'required' => 'required',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Last Name *",
+			),
+			'options' => array(
+				'label' => 'Last Name',
+			),
+			'validators' => array(array(
+				'name' => 'StringLength',
+				'options' => array(
+					'encoding' => 'UTF-8',
+					'min'      => 2,
+					'max'      => 50,
+				)
+			))
+		));
+
+		
 		
 		$this->add(array(
 			'name' => 'email',
 			'attributes' => array(
 				'type' => 'email',
 				'required' => 'required',
+				'required' => 'required',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Email Address *",
 			),
 			'options' => array(
 				'label' => 'Email',
@@ -55,10 +83,54 @@ class RegisterForm extends Form {
 			'attributes' => array(
 				'type' => 'password',
 				'required' => 'required',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Password *",
 			),
 			'options' => array(
 				'label' => 'Password',
 			),
+		));
+
+		$this->add(array(
+			'name' => 'phone_number',
+			'attributes' => array(
+				'type' => 'text',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Phone No.",
+			),
+			'options' => array(
+				'label' => 'Phone Number',
+			),
+			/*'validators' => array(array(
+				'name' => 'StringLength',
+				'options' => array(
+					'encoding' => 'UTF-8',
+					'min'      => 5,
+					'max'      => 50,
+				)
+			))*/
+		));
+		$this->add(array(
+			'name' => 'org_name',
+			'attributes' => array(
+				'type' => 'text',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Organization",
+			),
+			'options' => array(
+				'label' => 'Organization Number',
+			),			
+		));
+		$this->add(array(
+			'name' => 'designation_name',
+			'attributes' => array(
+				'type' => 'text',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Designation",
+			),
+			'options' => array(
+				'label' => 'Organization Number',
+			),			
 		));
 		
 		/*$this->add(array(
@@ -70,7 +142,7 @@ class RegisterForm extends Form {
 			'options' => array(
 				'label' => 'Confirm Password',
 			),
-		)); */
+		)); 
 		
 		$this->add(array(
 			'name' => 'address',
@@ -93,7 +165,7 @@ class RegisterForm extends Form {
 				'label' => 'Phone no.',
 			),
 		));
-		
+		*/
 		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(

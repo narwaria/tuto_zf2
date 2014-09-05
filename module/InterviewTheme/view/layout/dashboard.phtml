@@ -1,0 +1,97 @@
+<?php echo $this->doctype(); ?>
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> 
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        ->prependStylesheet($this->basePath() . '/css/main.css')
+                        
+                        
+                        ->prependStylesheet($this->basePath() . '/css/font-awesome.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        
+                         ?>
+   
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+            ->prependFile($this->basePath() . '/js/app.js')
+            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/js/modernizr-2.6.2-respond-1.1.0.min.js')
+            ->prependFile($this->basePath() . '/js/jquery-1.11.0.min.js')
+            
+                   
+            //->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            //->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+        ; ?>
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
+    </head>
+<!--[if lt IE 7]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]--> 
+<!-- BEGIN HEADER -->
+<body class="bg-dashboard page-header-fixed">
+<div role="navigation" id="io-navbar" class="header navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a href="#" class="navbar-brand"><img src="<?php echo $this->basePath('images/logo-io-s.png'); ?>" alt="Interview Organiser"></a> </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome <?php echo $this->auth["name"]; ?> <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Account Settings</a></li>
+          <li><a href="#">Help</a></li>
+          <li class="divider"></li>
+          <li><a href="<?php echo $this->url('users',array('controller' => 'Users','action'=>'logout')); ?>">Logout</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- END HEADER -->
+<div class="clearfix"></div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container"> 
+  <!-- BEGIN SIDEBAR --> 
+  <?php  if(isset($this->auth["name"])){
+          echo $this->partial('interview-theme/interview-theme/sidebar.phtml'); 
+      }
+  ?>
+  <!-- END SIDEBAR --> 
+
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+      <div class="page-content">
+        <?php  echo $this->content; ?>    
+      </div>
+  </div>
+  <!-- END CONTENT --> 
+</div>
+<!-- END CONTAINER --> 
+<!-- BEGIN FOOTER -->
+<div class="footer">
+  <div class="footer-inner">&copy; Interview Organiser</div>
+</div>
+<!-- END FOOTER -->  
+<script>
+jQuery(document).ready(function() {    
+   App.init();
+   $(".page-sidebar-menu li:nth-child(<?php echo isset($this->menuid)?$this->menuid:2; ?>) a").trigger('click');
+});
+</script>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

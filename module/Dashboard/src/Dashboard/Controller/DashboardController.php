@@ -5,16 +5,24 @@ namespace Dashboard\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
+
 class DashboardController extends AbstractActionController
 {
     protected $topicTable;
     protected $categoryTable;
+    protected $authservice;
     public function indexAction()
     {
-    	//$ConfigMenu = $this->getServiceLocator()->get('Config');
-        //$this->getServiceLocator()->get('TopicTableGateway');
+        
+        $authResponse = $this->getAuthService()->getStorage()->read();
 
-    	//$ConfigMenu["interview_menus"]
+
+    	$ConfigMenu = $this->getServiceLocator()->get('Config');
+        //$this->getServiceLocator()->get('TopicTableGateway');
+        
+    	
         //$topic= new TopicTable();
         $departmentsCount    = $this->getCategoryTable()->getdepartmentCount();
         $designationsCount   = $this->getCategoryTable()->getdesignationCount();
@@ -29,10 +37,22 @@ class DashboardController extends AbstractActionController
 
 
         $topics = $this->getTopicTable()->fetchAll();
-    	$this->layout()->setVariable('LeftMenu', "alok");
 
-    	$this->layout('layout/dashboard');
-        return new ViewModel(array("topics"=>$topics,'components'=>$components));
+
+    	$this->layout()->setVariable('auth',$authResponse);
+    	$this->layout('layout/dashboard');                
+        return new ViewModel(array("topics"=>$topics,'components'=>$components,'auth'=>$authResponse));
+    }
+
+    public function getAuthService() {
+        if (! $this->authservice) {
+            $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'user','email','password', 'MD5(?)');
+            $authService = new AuthenticationService();
+            $authService->setAdapter($dbTableAuthAdapter);
+            $this->authservice = $authService;
+        }
+        return $this->authservice;
     }
     
     public function getTopicTable()

@@ -26,9 +26,9 @@ echo $this->form()->closeTag();
         <th>
             Topic Name
         </th>
-        <th>
+       <!--  <th>
             Topic Description    
-        </th>
+        </th> -->
         <th>Action</th>
     </tr>
     <?php if($this->topics) : ?>
@@ -36,7 +36,7 @@ echo $this->form()->closeTag();
     ?>
         <tr>
             <td><?php echo $this->escapeHtml($topic->topic_name); ?></td>
-            <td><?php echo $this->escapeHtml($topic->topic_description); ?></td>
+           <!-- <td><?php echo $this->escapeHtml($topic->topic_description); ?></td> -->
             <td>
                 <a href="<?php echo $this->url('topic', array('action' => 'edit', 'topic_id' => $topic->topic_id));
         ?>">Edit</a> | <a href="<?php echo $this->url('topic', array('action' => 'delete', 'topic_id' => $topic->topic_id));
@@ -52,7 +52,7 @@ echo $this->form()->closeTag();
     ?>
         <tr>
             <td><?php echo $this->escapeHtml($topic->topic_name); ?></td>
-            <td><?php echo $this->escapeHtml($topic->topic_description); ?></td>
+            <!--<td><?php echo $this->escapeHtml($topic->topic_description); ?></td> -->
             <td>
                 <a href="<?php echo $this->url('topic', array('action' => 'edit', 'topic_id' => $topic->topic_id));
         ?>">Edit</a> | <a href="<?php echo $this->url('topic', array('action' => 'delete', 'topic_id' => $topic->topic_id));

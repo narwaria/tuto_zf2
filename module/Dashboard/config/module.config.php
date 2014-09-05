@@ -12,7 +12,7 @@ return array(
             'dashboard' => array(
                 'type' => 'Literal',               
                 'options' => array(
-                    'route' => '/admin/dashboard',
+                    'route' => '/user/dashboard',
                     'defaults' => array(
                         'controller' => 'Dashboard',
                         'action'     => 'index',
@@ -26,5 +26,10 @@ return array(
         'template_path_stack' => array(            
             'dashboard' => __DIR__ . '/../view',
         ),       
+    ),
+    'view_helpers' => array(
+        'invokables'=> array(
+            'special_purpose' => 'Dashboard\View\Helper\SpecialPurpose'  
+        )
     ),
 );

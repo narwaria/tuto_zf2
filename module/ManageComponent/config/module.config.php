@@ -16,7 +16,7 @@ return array(
             'topic' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/admin/topic[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'route'    => '/user/topic[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
                     'constraints' => array(
                         'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
@@ -36,7 +36,7 @@ return array(
             'department' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/admin/department[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'route'    => '/user/department[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
                     'constraints' => array(
                         'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
@@ -52,12 +52,11 @@ return array(
             ),
             // End Department
 
-
             // Designation Routing...
             'designation' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/admin/designation[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'route'    => '/user/designation[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
                     'constraints' => array(
                         'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
@@ -73,12 +72,11 @@ return array(
             ),
             // End Designation
 
-
             // Technology Routing...
             'technology' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/admin/technology[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'route'    => '/user/technology[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
                     'constraints' => array(
                         'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',

@@ -1,0 +1,15 @@
+<?php
+	$form = $this->form;
+	$form->prepare();
+	$form->setAttribute('action', $this->url(NULL, array('controller'=>'users', 'action' => 'forget')));
+	$form->setAttribute('method', 'post');
+	echo $this->form()->openTag($form);
+?>
+          <div class="form-group"> <span><i class="fa fa-user"></i></span>
+          	<?php echo $this->formElement($form->get('email')); ?>
+            <!-- <input type="email" placeholder="Email Address" id="" class="form-control"> -->
+          </div>        
+          <!-- <button class="btn btn-io mt-10" type="submit">Login</button> -->
+          <?php echo $this->formElement($form->get('submit')); ?>
+          <div class="clearfix"></div>
+<?php echo $this->form()->closeTag() ?>

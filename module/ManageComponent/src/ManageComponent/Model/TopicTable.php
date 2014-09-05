@@ -7,7 +7,7 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Insert;
+use Zend\Db\Sql\Insert,Zend\Db\Sql\Delete;
 use Zend\Db\Sql\Sql;
 
 
@@ -49,9 +49,9 @@ class TopicTable extends AbstractTableGateway
     public function saveTopic(Topic $topic)
     {
         $data = array(
-            'topic_name' => $topic->topic_name,
+            'topic_name'        =>  $topic->topic_name,
             'topic_description' =>  $topic->topic_description,
-            'topic_status'=>1
+            'topic_status'      =>  1
         );
 
         $id = (int)$topic->topic_id;
@@ -79,13 +79,38 @@ class TopicTable extends AbstractTableGateway
             $rowset=$resultSet->current();             
             return $rowset["topics_count"];
     }
+
+
     public function saveTopicTechnologyRelation($topic_id=null, $tech_id=null){            
             $sql        =   new Sql($this->adapter);
-            $insert     =   new Insert("tbl_topic_category_relation");
+            $insert     =   new Insert($this->topicCategoryRelationTable);
             $insert->values(array('topic_id'=>(int)$topic_id,'tech_id'=>(int)$tech_id));             
             $selectString = $sql->getSqlStringForSqlObject($insert);           
             $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+    }    
+    public function getTopicTechnologyRelation($topic_id=null, $tech_id=null){ 
+        
+        $sql        =   new Sql($this->adapter);
+        
+        $select = new Select($this->topicCategoryRelationTable);
+        if($topic_id!=NULL)
+        $select->where(array("topic_id"=>$topic_id));
+
+        if($tech_id!=NULL)
+        $select->where(array("tech_id"=>$tech_id));
+
+        $selectString = $sql->getSqlStringForSqlObject($select); 
+        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);        
+        return $results;
     }
+    public function deleteTopicTechnologyRelation($topic_id=NULL){
+        $sql        =   new Sql($this->adapter);
+        $delete     =   new Delete($this->topicCategoryRelationTable);
+        $delete->where(array("topic_id"=>$topic_id));
+        $selectString = $sql->getSqlStringForSqlObject($delete);
+        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+    }
+
     public function getlistdata(){
         return array("1"=>"Helo","2"=>"hi");
     }

@@ -10,6 +10,7 @@ class User {
 	public $phone;
     public $logLastAttmp;
     public $logFailedCount;
+    public $status;
 	
 	public function setPassword($clear_password) {
 		return $this->password = md5($clear_password);
@@ -25,6 +26,7 @@ class User {
 		$this->phone = (isset($data['phone'])) ? $data['phone'] : null;
 		$this->logLastAttmp = (isset($data['logLastAttmp'])) ? $data['logLastAttmp'] : null;
         $this->logFailedCount = (isset($data['logFailedCount'])) ? $data['logFailedCount'] : null;
+        $this->status = (isset($data['status'])) ? $data['status'] : null;
         
 	}
 	

@@ -11,11 +11,14 @@ class LoginForm extends Form {
 		$this->setAttribute('method', 'post');
 		$this->setAttribute('enctype','multipart/form-data');
 		
+
+
 		$this->add(array(
 			'name' => 'email',
 			'attributes' => array(
 				'type' => 'email',
 				'required' => 'required',
+				'class' => 'form-control',
 			),
 			'options' => array(
 				'label' => 'Email',
@@ -36,6 +39,7 @@ class LoginForm extends Form {
 			'attributes' => array(
 				'type' => 'password',
 				'required' => 'required',
+				'class' => 'form-control',
 			),
 			'options' => array(
 				'label' => 'Password',
@@ -46,7 +50,8 @@ class LoginForm extends Form {
 			'name' => 'submit',
 			'attributes' => array(
 				'type' => 'submit',
-				'Value' => 'Submit',
+				'Value' => 'Login',
+				'class'	=>	'btn btn-io mt-10 login-button',
 			),
 		));
         

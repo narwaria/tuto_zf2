@@ -1,15 +1,4 @@
-<h2> New User Registration </h2>
-<p> This page will hold the content for the registration form </p>
-
-<section class="register">
-
-<h2>Register</h2>
-<?php if ($this->error): ?>
-	<p class="error">
-		There were one or more issues with your submission. Please correct them as indicated below.
-	</p>
-<?php endif ?>
-
+<h3>Welcome, create your account to get started.</h3>
 <?php
 	$form = $this->form;
 	$form->prepare();
@@ -17,71 +6,54 @@
 	$form->setAttribute('method', 'post');
 	echo $this->form()->openTag($form);
 ?>
-
-<dl class="zend_form">
-	<dt><?php echo $this->formLabel($form->get('name')); ?></dt>
-	<dd>
-		<?php
-			echo $this->formElement($form->get('name'));
-			echo $this->formElementErrors($form->get('name'));
-		?>
-	</dd>
-	<dt>
-		<?php echo $this->formLabel($form->get('email')); ?>
-	</dt>
-	<dd>
-		<?php
-			echo $this->formElement($form->get('email'));
-			echo $this->formElementErrors($form->get('email'));
-		?>
-	</dd>
-	<dt>
-		<?php echo $this->formLabel($form->get('password'));?>
-	</dt>
-	<dd>
-		<?php
-			echo $this->formElement($form->get('password'));
-			echo $this->formElementErrors($form->get('password'));
-		?>
-	</dd>
-	<!--<dt>
-		<?php //echo $this->formLabel($form->get('confirm_password')); ?>
-	</dt>
-	<dd>
-		<?php 
-			//echo $this->formElement($form->get('confirm_password'));
-			//echo $this->formElementErrors($form->get('confirm_password'));
-		?>
-	</dd>-->
-	<dt>
-		<?php echo $this->formLabel($form->get('address'));?>
-	</dt>
-	<dd>
-		<?php
-			echo $this->formElement($form->get('address'));
-			echo $this->formElementErrors($form->get('address'));
-		?>
-	</dd>
-	<dt>
-		<?php echo $this->formLabel($form->get('phone')); ?>
-	</dt>
-	<dd>
-		<?php 
-			echo $this->formElement($form->get('phone'));
-			echo $this->formElementErrors($form->get('phone'));
-		?>
-	</dd>
-	<dd><br/></dd>
-	<dd>
-		<?php
-			echo $this->formElement($form->get('submit'));
-			echo $this->formElementErrors($form->get('submit'));
-		?>
-	</dd>
-</dl>
-
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('name'));
+              		  echo $this->formElementErrors($form->get('name')); ?>
+                <!-- <input type="text" placeholder="First Name *" id="" class="form-control pl-20"> -->
+              </div>
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('lname'));
+              		  echo $this->formElementErrors($form->get('lname')); ?>
+                <!--<input type="text" placeholder="Last Name *" id="" class="form-control pl-20"> -->
+              </div>
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('email'));
+              		  echo $this->formElementErrors($form->get('email')); ?>
+                <!-- <input type="email" placeholder="Email Address *" id="" class="form-control pl-20"> -->
+              </div>
+              <div class="io-form-note">Verification link will be sent to this Email ID.</div>
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('password'));
+              		  echo $this->formElementErrors($form->get('password')); ?>
+                <!-- <input type="password" placeholder="Password *" id="" class="form-control pl-20"> -->
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Confirm Password *" id="" class="form-control pl-20">
+              </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+            	<?php echo $this->formElement($form->get('phone_number'));
+              		  echo $this->formElementErrors($form->get('phone_number')); ?>
+            <!-- <input type="phone" placeholder="Phone No." id="" class="form-control pl-20"> -->
+          </div>
+            <div class="form-group">
+            	<?php echo $this->formElement($form->get('org_name'));
+              		  echo $this->formElementErrors($form->get('org_name')); ?>
+            <!-- <input type="text" placeholder="Organization" id="" class="form-control pl-20"> -->
+          </div>
+            <div class="form-group">
+            	<?php echo $this->formElement($form->get('designation_name'));
+              		  echo $this->formElementErrors($form->get('designation_name')); ?>
+            <!-- <input type="text" placeholder="Designation" id="" class="form-control pl-20"> -->
+          </div>
+              <div class="form-group"><img alt="CAPTCHA Image" src="images/captcha.png" id="captcha" class="captcha_image">&nbsp;&nbsp;<a href="#"><i class="fa fa-refresh"></i></a>
+            <input type="text" placeholder="Type characters from the image *" id="" class="form-control mt-10 pl-20">
+          </div>
+            <button class="btn btn-io mt-10" type="submit">Sign Up</button>
+          </div>
+          </div>
+          
 <?php echo $this->form()->closeTag() ?>
-
-</section>
-<br/><br/>
-<a href="/users"><< Back to Home</a>

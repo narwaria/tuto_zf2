@@ -7,10 +7,16 @@
  */
 return array(
     'modules' => array(
-        'Application',
-        'ZfcBase',
-        'ZfcUser',
-        'Dashboard',            
+        //'Application',
+        //'ZfcBase',
+        //'ZfcUser',
+        'Dashboard',
+        'ManageComponent',
+        'Navigation',
+        'Users',
+        
+        //'TopicManagement',
+        //'Users'
     ),
     'module_listener_options' => array(
         'module_paths' => array(

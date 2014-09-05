@@ -42,10 +42,8 @@ class UserTable {
             'logFailedCount' => $user['logFailedCount'],
 		);
 		
-		$id = (int)$user['id'];
-		
-        $this->tableGateway->update($data, array('id' => $id));
-		
+		$id = (int)$user['id'];		
+        $this->tableGateway->update($data, array('id' => $id));		
 	}
     
 	public function getUser($id) {

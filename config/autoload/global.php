@@ -13,6 +13,7 @@
 
 return array(
 	'interview_constants'=>array(
+		'default_login_attempts'		=>	3,
 		'default_pager_elements'	=>	10,
 		'default_date_format'		=>	'dd-mm-YYYY',
 		'default_max_options'		=>	6,
