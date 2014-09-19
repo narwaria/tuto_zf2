@@ -18,18 +18,37 @@ class UserTable  extends AbstractTableGateway{
 	protected $adapter;
 	protected $token = 'token';
 	protected $table = 'tbl_user';
-	/*
-	public function __construct(TableGateway $tableGateway) {
-		$this->tableGateway = $tableGateway;
-	} */
-
+	protected $user_permission=	"tbl_user_permission";
+	
 	public function __construct(Adapter $adapter) {
-        $this->adapter = $adapter;
-        //$this->resultSetPrototype = new ResultSet();
-        //$this->resultSetPrototype->setArrayObjectPrototype(new Topic());        
-       // $this->initialize();
+        $this->adapter = $adapter;        
     }
 
+    public function fetchAll(Select $select = null) {
+	if (null === $select)
+	$select = new Select();
+	$select->from($this->table);
+	$resultSet = $this->selectWith($select);
+	$resultSet->buffer();
+	return $resultSet;
+	}
+
+    public function getMyUserList($params=array(),$client_id=null){
+		$select = new Select();		
+		$select->from($this->table);		
+        $select->where->NEST->equalTo($this->table.'.client_id',$client_id)->UNNEST;
+       
+        if(isset($params["status"]) && $params["status"]!=""){
+        	$status=($params["status"]=="active")?1:0;
+        	$select->where->NEST->in($this->table.'.status',array($status))->UNNEST;
+        }else{
+        	$select->where->NEST->in($this->table.'.status',array(0,1))->UNNEST;
+        }        
+        $select->where->NEST->like('fname','%'.$params["search"].'%')->or->like('lname','%'.$params["search"].'%')->or->like('email','%'.$params["search"].'%')->UNNEST;
+		$resultSet = $this->selectWith($select);				
+		$resultSet->buffer();		
+		return $resultSet;
+    }
     public function createUser(User $user){
     	$data = array(
     		'fname'		=> $user->fname,
@@ -47,27 +66,34 @@ class UserTable  extends AbstractTableGateway{
 		);
     	$this->insert($data);
     }
-	
-	public function saveUser(User $user) {
-		$data = array(
-			'email'		=> $user->email,
-			'name'		=> $user->name,
+    public function addUser(User $user){
+    	$data = array(
+    		'fname'		=> $user->fname,
+    		'lname'		=> $user->lname,
+			'email'		=> $user->email,			
 			'password'	=> $user->password,
-			'address'	=> $user->address,
-			'phone'		=> $user->phone,
-			'status'	=> 0,
+
+			'designation'	=>	$user->designation,
+			'organisation'	=>	$user->organisation,
+			'organisation'	=>	$user->organisation,
+			'phone'			=> $user->phone,
+
+			'client_id'		=> $user->client_id,
+			'status'		=> $user->status,
 		);
-		
-		$id = (int)$user->id;
-		
-		if ($id == 0) {
-			$this->insert($data);
-		} else {
-			if ($this->getUser($id)) {
-				$this->update($data, array('id' => $id));
-			} else {
-				throw new \Exception('User ID does not exist');
-			}
+    	$this->insert($data);
+    }
+	
+	public function updateUser(User $user) {
+		$data = array(
+			'fname'		=> $user->fname,
+    		'lname'		=> $user->lname,
+			'email'		=> $user->email,
+			'status'	=> $user->status
+		);		
+		$user_id = (int)$user->user_id;		
+		if ($user_id != 0) {
+			$this->update($data, array('user_id' => $user_id));			
 		}
 	}
 
@@ -109,11 +135,37 @@ class UserTable  extends AbstractTableGateway{
 		return $resultSet;
 	}
 	
-	public function getUserByEmail($userEmail) {
-		
+	public function getUserByEmail($userEmail) {		
         $rowset = $this->select(array('email' => $userEmail));
         $row = $rowset->current();        
         return $row;
+	}
+	public function getActiveUserByEmail($userEmail) {	
+        $rowset = $this->select(array('email' => $userEmail,"status"=>1));
+        $row = $rowset->current();        
+        return $row;
+	}
+
+	public function getActiveUserByUserid($user_id=null) {	
+        $rowset = $this->select(array('user_id' => $user_id,"status"=>1));
+        $row = $rowset->current();        
+        return $row;
+	}
+	public function getInActiveUserByEmail($userEmail=null) {	
+        $rowset = $this->select(array('email' => $userEmail,"status"=>0));
+        $row = $rowset->current();        
+        return $row;
+	}
+	public function getInActiveUserByUserid($user_id=null) {	
+        $rowset = $this->select(array('user_id' => $user_id,"status"=>0));
+        $row = $rowset->current();        
+        return $row;
+	}
+	public function IsTokenAvalibleForUser($token=null,$user_id=null){	
+        $rowset = $this->select(array('token' => $token,"user_id"=>$user_id));
+        $row = $rowset->current();        
+        return $row;
+
 	}
 	public function usertokeninsert($user_id=null,$token=null){
 		$data = array(
@@ -138,8 +190,14 @@ class UserTable  extends AbstractTableGateway{
         $this->update($data, array('user_id' => (int)$user_id));
 	}
 	
-	public function deleteUser($id) {
-		$this->delete(array('id' => $id));
+
+
+	public function deleteUser(User $user) {
+		$data = array(
+			'token' => NULL,
+			'status' => 2,		
+		);			
+        $this->update($data, array('user_id' => (int)$user->user_id));
 	}
 
 	public function CheckUserToken($token){	
@@ -191,5 +249,34 @@ class UserTable  extends AbstractTableGateway{
         	return $row;      	
         }   
     }
-
+    public function userPermissionSet($user_id,$permissionArray=array()){
+    	if(count($permissionArray)!=0){
+    		$this->deletePermissionByUserId($user_id);
+    		foreach ($permissionArray as $key => $value) {
+    			$sql        =   new Sql($this->adapter);
+	            $insert     =   new Insert($this->user_permission);
+	            $insert->values(array('user_id'=>(int)$user_id,'permission_id'=>(int)$value));             
+	            $selectString = $sql->getSqlStringForSqlObject($insert);           
+	            $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+    		}
+    	}
+    }
+    public function getUserPermission($user_id=0){
+    	if($user_id!=0){
+    		$sql        =   new Sql($this->adapter);        
+	        $select 	= 	new Select($this->user_permission);	   
+	        $select->columns(array("permission_id"));     
+	        $select->where(array("user_id"=>$user_id));
+	        $selectString = $sql->getSqlStringForSqlObject($select); 
+	        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);        
+	        return $results->toArray();
+    	}
+    }
+    public function deletePermissionByUserId($user_id=NULL){
+        $sql        =   new Sql($this->adapter);
+        $delete     =   new Delete($this->user_permission);
+        $delete->where(array("user_id"=>$user_id));
+        $selectString = $sql->getSqlStringForSqlObject($delete);
+        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+    }
 }

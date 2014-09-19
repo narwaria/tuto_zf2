@@ -11,12 +11,12 @@ class User {
 	public $designation;
 	public $organisation;
 	public $phone;
-        public $log_last_attmp;
-        public $log_failed_count;
-
-        public $token;
-        public $status;
-        public $client_id;
+    public $log_last_attmp;
+    public $log_failed_count;
+    
+    public $token;
+    public $status;
+    public $client_id;
 	
 	public function setPassword($clear_password) {
 		return $this->password = md5($clear_password);
@@ -38,8 +38,8 @@ class User {
 
 		
 		$this->token 		= (isset($data['token'])) ? $data['token'] : null;
-                $this->status 		= (isset($data['status'])) ? $data['status'] : null;
-                $this->client_id 	= (isset($data['client_id'])) ? $data['client_id'] : null;
+        $this->status 		= (isset($data['status'])) ? $data['status'] : null;
+        $this->client_id 	= (isset($data['client_id'])) ? $data['client_id'] : null;
         
 	}
 	

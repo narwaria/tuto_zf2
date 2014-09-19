@@ -1,3 +1,44 @@
-Module: Users
-Controller: UserManager
-Action: delete
+<?php
+$title = 'Delete User';
+$this->headTitle($title);
+$form = $this->form;
+$form->setAttribute('action', $this->url("manageuser", array('controller'=>'users', 'action' => 'delete',"user_id"=>$this->user_id)));
+$form->setAttribute('class', "form-horizontal");
+$form->setAttribute('role', "form");
+$form->prepare();
+?>
+<h1 class="page-title"><?php echo $this->escapeHtml($title); ?></h1>
+
+<div class="row">
+  <div class="col-xs-12 col-sm-12">
+    <div class="io-db-block">
+      <div class="io-db-block-header">Are you sure you want to delete this user?</div>
+      <div class="io-db-block-content">        
+        <?php echo $this->form()->openTag($form); ?>          
+          <div class="form-body">
+
+            <?php if($this->formElementErrors($form)) : ?>
+              <div class="alert alert-danger" role="alert">
+                <?php echo $this->formElementErrors($form); ?>
+              </div>
+            <?php  endif; ?>
+
+            <div class="form-group">
+              <label class="col-xs-12 col-md-3 control-label"></label>  
+              <div class="col-xs-12 col-md-5 col-lg-3">
+                  <?php echo $this->formElement($form->get('user_id')); ?>  
+              </div>
+            </div>            
+            <div class="form-actions">
+              <div class="row">
+                <div class="col-md-9">                  
+                  <button class="btn btn-io" type="submit">Delete this user</button>                  
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php echo $this->form()->closeTag(); ?>
+      </div>
+    </div>
+  </div>
+</div>

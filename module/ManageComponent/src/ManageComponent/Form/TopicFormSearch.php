@@ -25,22 +25,6 @@ class TopicFormSearch extends Form
         
         $this->add(array(
              'type' => 'Zend\Form\Element\Select',
-             'name' => 'departments',
-             'attributes' => array(
-                 'class' => 'form-control',
-             ),
-        ));
-        
-        $this->add(array(
-             'type' => 'Zend\Form\Element\Select',
-             'name' => 'designations',
-             'attributes' => array(
-                 'class' => 'form-control',
-             ),
-        ));
-        
-        $this->add(array(
-             'type' => 'Zend\Form\Element\Select',
              'name' => 'skills',
              'attributes' => array(
                  'class' => 'form-control',

@@ -32,9 +32,4 @@ return array(
             'special_purpose' => 'Dashboard\View\Helper\SpecialPurpose'  
         )
     ),
-     'controller_plugins' => array(
-    'invokables' => array(
-        'MyFirstPlugin' => 'Dashboard\Controller\Plugin\MyFirstPlugin',
-        )
-    ),
 );

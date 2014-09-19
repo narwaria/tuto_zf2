@@ -5,9 +5,9 @@ use Zend\Form\Form;
 
 class AddUserForm extends Form {
 	public function __construct($name = null) {		
-		parent::__construct('AddUser');		
+		parent::__construct('Register');		
 		$this->setAttribute('method', 'post');
-		//$this->setAttribute('enctype','multipart/form-data');
+		$this->setAttribute('enctype','multipart/form-data');
 		
 		$this->add(array(
 			'name' => 'fname',
@@ -106,7 +106,35 @@ class AddUserForm extends Form {
 			'options' => array(
 				'label' => 'Phone Number',
 			),			
-		)); 
+		));
+		$this->add(array(     
+		    'type' => 'Select',       
+		    'name' => 'status',
+		    'attributes' =>  array(
+		        'id' => 'user-status', 
+		        "class"=>"form-control",               
+		        'options' => array(		        	
+		            '1' => 'Active',
+		            '0' => 'In Active',
+		        ),
+		    ),
+		    'options' => array(
+		        'label' => 'Select Status',
+		    ),
+		));
+
+		$this->add(array(
+             'type' => 'Zend\Form\Element\MultiCheckbox',
+             'name' => 'permission',
+             'options' => array(
+                'label' => 'User Permission',
+                'label_attributes' => array(
+                    'class' => 'col-xs-12 col-md-6 checkbox',
+                ),
+                'value_options' => array(),
+             )
+        ));
+
 		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(

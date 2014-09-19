@@ -1,22 +1,15 @@
 <div class="io-header"><img src="<?php echo $this->basePath('images/logo-io.png'); ?>" alt="Interview Organiser"></div>
 <div class="io-body">
 <h3>Welcome, create your account to get started.</h3>
-
-
+<?php  echo $this->flashMessenger()->render('danger', array('alert', 'alert-danger'));    ?>
+<?php  echo $this->flashMessenger()->render('info', array('alert', 'alert-info'));        ?>
+<?php  echo $this->flashMessenger()->render('warning', array('alert', 'alert-warning'));  ?>
 
 <?php if($this->formElementErrors($form)) : ?>
-<div class="alert alert-danger" role="alert">
-<?php echo $this->formElementErrors($form); ?>
-</div>
-<?php  endif; ?>
-
-<?php  if ($this->flashMessenger()->hasMessages()): ?>
-  <div class="alert alert-success">
-            <?php      $messages = $this->flashMessenger()->getMessages(); foreach($messages as $message) {     echo $message;   } ?> 
+  <div class="alert alert-danger" role="alert">
+    <?php echo $this->formElementErrors($form); ?>
   </div>
-<?php endif; ?>
-
-
+<?php  endif; ?>
 <?php
 	$form = $this->form;
 	$form->prepare();

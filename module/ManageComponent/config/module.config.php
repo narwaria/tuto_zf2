@@ -6,7 +6,7 @@ return array(
             'ManageComponent\Controller\Topic'      =>	'ManageComponent\Controller\TopicController',
             'ManageComponent\Controller\Department' =>	'ManageComponent\Controller\DepartmentController',
             'ManageComponent\Controller\Designation'=>	'ManageComponent\Controller\DesignationController',
-            'ManageComponent\Controller\Technology' =>  'ManageComponent\Controller\TechnologyController',
+            'ManageComponent\Controller\Skill'      =>  'ManageComponent\Controller\SkillController',
         ),
     ),
     // The following section is new and should be added to your file
@@ -37,7 +37,7 @@ return array(
             'department' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/department[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'route'    => '/department[/:action][/:dept_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
                     'constraints' => array(
                         'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
@@ -57,7 +57,7 @@ return array(
             'designation' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/designation[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'route'    => '/designation[/:action][/:desig_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
                     'constraints' => array(
                         'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
@@ -73,25 +73,25 @@ return array(
             ),
             // End Designation
 
-            // Technology Routing...
-            'technology' => array(
+            // Skill Routing...
+            'skill' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/technology[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
-                    'constraints' => array(
-                        'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
-                        'page' => '[0-9]+',
-                        'order_by' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'order' => 'ASC|DESC',
+                    'route'    => '/skill[/:action][/:skill_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'constraints'	=> array(
+                        'action'	=> '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     	=> '[0-9]+',
+                        'page' 		=> '[0-9]+',
+                        'order_by'	=> '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'order'		=> 'ASC|DESC',
                     ),
                     'defaults' => array(
-                        'controller' => 'ManageComponent\Controller\Technology',
-                        'action'     => 'index',
+                        'controller'=> 'ManageComponent\Controller\Skill',
+                        'action'	=> 'index',
                     ),
                 ),
             ),
-            // End Technology
+            // End Skill
 
         ),
     ),    

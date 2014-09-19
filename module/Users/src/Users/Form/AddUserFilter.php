@@ -1,14 +1,17 @@
 <?php
+
 namespace Users\Form;
 use Zend\InputFilter\InputFilter;
+
 class AddUserFilter extends InputFilter {	
-	public function __construct(){		
+	public function __construct(){
+		
 		$this->add(array(
 			'name' => 'fname',
 			'required' => true,
 			'filters' => array(
 				 array('name' => 'StripTags'),
-                                 array('name' => 'StringTrim')
+                 array('name' => 'StringTrim')
 			),
 			'validators' => array(array(
 				'name' => 'StringLength',
@@ -77,7 +80,7 @@ class AddUserFilter extends InputFilter {
 				),
 			)),
 		));
-
+		
 		$this->add(array(
 		    'name' => 'confirm_password', // add second password field
 		    /* ... other params ... */

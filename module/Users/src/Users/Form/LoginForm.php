@@ -19,6 +19,7 @@ class LoginForm extends Form {
 				'type' => 'email',
 				'required' => 'required',
 				'class' => 'form-control',
+				'placeholder' => 'Email Address',
 			),
 			'options' => array(
 				'label' => 'Email',
@@ -40,6 +41,7 @@ class LoginForm extends Form {
 				'type' => 'password',
 				'required' => 'required',
 				'class' => 'form-control',
+				'placeholder' => 'Password',
 			),
 			'options' => array(
 				'label' => 'Password',

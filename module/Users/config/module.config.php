@@ -30,12 +30,13 @@ return array(
             'manageuser' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/manage/user[/:action][/:topic_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'route'    => '/manage/user[/:action][/:user_id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
                     'constraints' => array(
                         'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
                         'page'   => '[0-9]+',
                         'order_by'=> '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'user_id'=> '[0-9]+',
                         'order'  => 'ASC|DESC',
                     ),
                     'defaults' => array(
@@ -53,5 +54,12 @@ return array(
         'template_path_stack' => array(
             'users' => __DIR__ . '/../view',
         ),
+    ),
+    'controller_plugins' => array(
+        'invokables' => array(
+            'SendMail' => 'Users\Controller\Plugin\SendMail',
+            'authService' => 'Users\Controller\Plugin\AuthService',
+            'UsersCommonFuncions' => 'Users\Controller\Plugin\UsersCommonFuncions',
+        )
     ),
 );

@@ -2,7 +2,6 @@
 // module/Album/src/Album/Model/AlbumTable.php:
 namespace ManageComponent\Model;
 
-
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
@@ -17,8 +16,8 @@ use Zend\Paginator\Paginator;
 class TopicTable extends AbstractTableGateway 
 {
     protected $tableGateway;
-    protected $table = 'tbl_topic'; 
-    protected $topicCategoryRelationTable= 'tbl_topic_category_relation';
+    protected $table        = 'tbl_topic'; 
+    protected $topicSkill   = 'tbl_topic_skill';
     protected $adapter;
 
 
@@ -38,6 +37,8 @@ class TopicTable extends AbstractTableGateway
         if(isset($query)){
             $select->where->like('topic_name', '%'.$query.'%');
         }
+        
+        $select->order('topic_name');
         
         if($paginated) {
             $resultSetPrototype = new ResultSet();
@@ -63,14 +64,15 @@ class TopicTable extends AbstractTableGateway
         return $row;
     }
 
-    public function saveTopic(Topic $topic)
-    {
+    public function saveTopic($topic) { 
+        
         $data = array(
-            'topic_name'        =>  $topic->topic_name,
-            'topic_description' =>  $topic->topic_description,
-            'topic_status'      =>  1
+            'topic_name'        => $topic->topic_name,
+            'client_id'         => $topic->client_id,
+            'created_by_user_id'=> $topic->created_by_user_id,
+            'created_date'      => $topic->created_date,
         );
-
+        
         $id = (int)$topic->topic_id;
         if ($id == 0) {
             $this->insert($data);
@@ -82,46 +84,65 @@ class TopicTable extends AbstractTableGateway
             }
         }
     }
+    
+    public function updateTopic($topic) { 
+        
+        $data = array(
+            'topic_name' => $topic->topic_name,
+        );
+        
+        $id = (int)$topic->topic_id;
+        
+        if ($this->getTopic($id)) {
+            $this->update($data, array('topic_id' => $id));
+        } else {
+            throw new \Exception('Form id does not exist');
+        }
+    }
 
     public function deleteTopic($id){
         $this->tableGateway->delete(array('topic_id' => $id));
     }
     
     public function getTopicCount(){
-            $select = new Select();
-            $select->from($this->table);
-            $select->columns(array('topics_count' => new \Zend\Db\Sql\Expression('COUNT(topic_id)')));
-            //$select->where(array("topic_status"=>1));
-            $resultSet = $this->selectWith($select);
-            $rowset=$resultSet->current();             
-            return $rowset["topics_count"];
+        $select = new Select();
+        $select->from($this->table);
+        $select->columns(array('topics_count' => new \Zend\Db\Sql\Expression('COUNT(topic_id)')));
+        //$select->where(array("topic_status"=>1));
+        $resultSet = $this->selectWith($select);
+        $rowset=$resultSet->current();             
+        return $rowset["topics_count"];
     }
 
-    public function saveTopicTechnologyRelation($topic_id=null, $tech_id=null){            
-            $sql        =   new Sql($this->adapter);
-            $insert     =   new Insert($this->topicCategoryRelationTable);
-            $insert->values(array('topic_id'=>(int)$topic_id,'tech_id'=>(int)$tech_id));             
-            $selectString = $sql->getSqlStringForSqlObject($insert);           
-            $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
-    }    
-    public function getTopicTechnologyRelation($topic_id=null, $tech_id=null){ 
+    public function saveSkillByTopic($topic_id=null, $skill_id=null){            
+        $sql        = new Sql($this->adapter);
+        $insert     = new Insert($this->topicSkill);
         
-        $sql        =   new Sql($this->adapter);
+        $insert->values(array('topic_id'=>(int)$topic_id,'skill_id'=>(int)$skill_id));             
+        $selectString = $sql->getSqlStringForSqlObject($insert);
+        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+    }
+    
+    public function getSkillByTopic($topic_id=null, $tech_id=null){ 
+        $sql    = new Sql($this->adapter);
+        $select = new Select($this->topicSkill);
         
-        $select = new Select($this->topicCategoryRelationTable);
-        if($topic_id!=NULL)
-        $select->where(array("topic_id"=>$topic_id));
+        if($topic_id!=NULL) {
+            $select->where(array("topic_id"=>$topic_id));
+        }
 
-        if($tech_id!=NULL)
-        $select->where(array("tech_id"=>$tech_id));
-
+        if($tech_id!=NULL){
+            $select->where(array("tech_id"=>$tech_id));
+        }
+        
         $selectString = $sql->getSqlStringForSqlObject($select); 
         $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);        
         return $results;
     }
-    public function deleteTopicTechnologyRelation($topic_id=NULL){
+    
+    public function deleteSkillByTopic($topic_id=NULL){
         $sql        =   new Sql($this->adapter);
-        $delete     =   new Delete($this->topicCategoryRelationTable);
+        $delete     =   new Delete($this->topicSkill);
         $delete->where(array("topic_id"=>$topic_id));
         $selectString = $sql->getSqlStringForSqlObject($delete);
         $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);

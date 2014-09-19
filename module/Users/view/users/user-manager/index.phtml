@@ -1,3 +1,10 @@
+<?php
+$form = $this->form;
+$form->setAttribute('class', "form-horizontal");
+$form->setAttribute('role', "form");
+$form->prepare();
+?>
+
       <h1 class="page-title">Manage User</h1>
       <div class="page-bar">
         <ul class="page-breadcrumb">
@@ -5,38 +12,30 @@
           <li><a href="#">User Management</a><i class="fa fa-angle-right"></i></li>
           <li>Manage User</li>
         </ul>
-      </div>
+      </div> 
+
       <div class="io-search-filter row">
         <div class="col-xs-6 col-sm-6">
+          <?php  echo $this->flashMessenger()->render('danger', array('alert', 'alert-danger'));    ?>
+          <?php  echo $this->flashMessenger()->render('info', array('alert', 'alert-info'));        ?>
+          <?php  echo $this->flashMessenger()->render('warning', array('alert', 'alert-warning'));  ?>
           <h3>Search</h3>
-        </div>
-        <div class="col-xs-6 col-sm-6 text-right"><a href="#collapseOne" data-parent="#accordion" data-toggle="collapse">Show / Hide</a></div>
-      </div>
+        </div>      
+        <div class="col-xs-6 col-sm-6 text-right">
+          <a href="#collapseOne" data-parent="#accordion" data-toggle="collapse">Show / Hide</a></div>
+         </div>
+      
       <div id="collapseOne" class="io-filter-block panel-collapse collapse in">
+        <?php echo $this->form()->openTag($form); ?> 
       	<div class="row">
-        <div class="col-xs-12 col-sm-4 col-md-2">
+        <div class="col-xs-12 col-sm-4 col-md-3">
             <label>Search Term</label>
-            <input type="text" placeholder="Name / Email" id="" class="form-control">
-        </div>
-        <div class="col-xs-12 col-sm-3 col-md-2">
-            <label>Select Role</label>
-            <select class="form-control">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-        </div>
-        <div class="col-xs-12 col-sm-3 col-md-2">
-            <label>Select Status</label>
-            <select class="form-control">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
+            <?php echo $this->formElement($form->get('search')); ?>
+            
+        </div>      
+        <div class="col-xs-12 col-sm-3 col-md-2">            
+            <label>Select Status</label>            
+            <?php echo $this->formElement($form->get('status')); ?>
         </div>
         <div class="col-xs-12 col-sm-2 col-md-2">
           <label>&nbsp;</label>
@@ -45,8 +44,18 @@
           </div>
         </div>
         </div>
+         <?php echo $this->form()->closeTag(); ?>
       </div>
+
       <div class="row">
+        <div class="col-xs-12 col-sm-12 text-right">
+          <?php if((int)$this->auth["client_id"]==0): ?>
+                <a href="<?php echo $this->url('manageuser', array('controller'=>'users', 'action' => 'adduser')); ?>" class="btn btn-default">Add User</a>
+            <?php endif; ?>          
+        </div>
+      </div>
+
+      <div class="row mt-10">
         <div class="col-xs-12 col-sm-12">
           <div class="table-responsive">
             <table class="table table-striped">
@@ -55,58 +64,39 @@
                   <th class="text-center">S. No.</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Role</th>
+                  <th>Permission</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
+              <?php if(count($this->paginator)==0) { ?>
+                  <tr><td colspan ="6"><center><p>No record found<p></center></td></tr>
+              <?php } ?>  
+              <?php foreach ($this->paginator as $user) :   ?>
+                        
                   <td class="text-center">1</td>
-                  <td>Ashish Sharma</td>
-                  <td>ashish.sharma@gmail.com</td>
+                  <td><?php echo $user->fname." ".$user->lname; ?></td>
+                  <td><?php echo $user->email; ?></td>
                   <td>Human Resource</td>
-                  <td>Active / Inactive</td>
+                  <td><?php echo ($user->status==1)?"Active":"Inactive"; ?></td>
                   <td><ul class="quick-links">
-                      <li><a href="#"><i class="fa fa-edit"></i>Edit</a></li>
-                      <li><a href="#"><i class="fa fa-trash-o"></i>Delete</a></li>
+                      <li><a href="<?php echo $this->url('manageuser', array('controller'=>'users', 'action' => 'edit','user_id'=> $user->user_id)); ?>"><i class="fa fa-edit"></i>Edit</a></li>
+                      <li><a href="<?php echo $this->url('manageuser', array('controller'=>'users', 'action' => 'delete','user_id'=> $user->user_id)); ?>"><i class="fa fa-trash-o"></i>Delete</a></li>
                     </ul></td>
                 </tr>
-                <tr>
-                  <td class="text-center">2</td>
-                  <td>Mukesh Bhardwaj</td>
-                  <td>mukesh.bhardwaj@gmail.com</td>
-                  <td>Finance</td>
-                  <td>Active / Inactive</td>
-                  <td><ul class="quick-links">
-                      <li><a href="#"><i class="fa fa-edit"></i>Edit</a></li>
-                      <li><a href="#"><i class="fa fa-trash-o"></i>Delete</a></li>
-                    </ul></td>
-                </tr>
-                <tr>
-                  <td class="text-center">3</td>
-                  <td>Shailesh Shukla</td>
-                  <td>shailesh.shukla2008@yahoo.com</td>
-                  <td>Administration</td>
-                  <td>Active / Inactive</td>
-                  <td><ul class="quick-links">
-                      <li><a href="#"><i class="fa fa-edit"></i>Edit</a></li>
-                      <li><a href="#"><i class="fa fa-trash-o"></i>Delete</a></li>
-                    </ul></td>
-                </tr>
+              <?php endforeach; ?>                
               </tbody>
             </table>
           </div>
-          <div class="pagination-wrap">
-            <ul class="pagination">
-              <li class="disabled"><a href="#">«</a></li>
-              <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">»</a></li>
-            </ul>
-          </div>
+             <?php // add at the end of the file after the table
+                echo $this->paginationControl(
+                      $this->topics,
+                      'Sliding',
+                      array('paginator.phtml', 'Topic'), 
+                      array('route' => 'manageuser', 'query'=>($this->querydata!="")?"&{$this->querydata}":"")
+                  );
+                  
+              ?> 
         </div>
       </div>
