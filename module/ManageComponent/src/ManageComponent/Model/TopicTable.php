@@ -10,6 +10,9 @@ use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Insert,Zend\Db\Sql\Delete;
 use Zend\Db\Sql\Sql;
 
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Paginator;
+
 
 class TopicTable extends AbstractTableGateway 
 {
@@ -26,12 +29,26 @@ class TopicTable extends AbstractTableGateway
        // $this->initialize();
     }
 
-    public function fetchAll(Select $select = null) {
-        if (null === $select)
-            $select = new Select();
-        $select->from($this->table);        
+    public function fetchAll($query=null, $paginated=false) {
+        //if (null === $select) $select = new Select();
+        
+        $select = new Select();
+        $select->from($this->table);
+        
+        if(isset($query)){
+            $select->where->like('topic_name', '%'.$query.'%');
+        }
+        
+        if($paginated) {
+            $resultSetPrototype = new ResultSet();
+            $resultSetPrototype->setArrayObjectPrototype(new Topic());
+            $paginatorAdapter = new DbSelect($select, $this->adapter, $resultSetPrototype);
+            $paginator = new Paginator($paginatorAdapter);
+            return $paginator;
+        }
+        
         $resultSet = $this->selectWith($select);
-        $resultSet->buffer();
+        //$resultSet->buffer();
         return $resultSet;
     }
 
@@ -66,20 +83,19 @@ class TopicTable extends AbstractTableGateway
         }
     }
 
-    public function deleteTopic($id)
-    {
+    public function deleteTopic($id){
         $this->tableGateway->delete(array('topic_id' => $id));
     }
-    public function gettopicCount(){
+    
+    public function getTopicCount(){
             $select = new Select();
             $select->from($this->table);
             $select->columns(array('topics_count' => new \Zend\Db\Sql\Expression('COUNT(topic_id)')));
-            $select->where(array("topic_status"=>1));
+            //$select->where(array("topic_status"=>1));
             $resultSet = $this->selectWith($select);
             $rowset=$resultSet->current();             
             return $rowset["topics_count"];
     }
-
 
     public function saveTopicTechnologyRelation($topic_id=null, $tech_id=null){            
             $sql        =   new Sql($this->adapter);

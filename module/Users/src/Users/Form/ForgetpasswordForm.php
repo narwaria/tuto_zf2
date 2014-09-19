@@ -18,7 +18,8 @@ class ForgetpasswordForm extends Form {
 			'attributes' => array(
 				'type' => 'email',
 				'required' => 'required',
-				//'class' => 'form-control',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Registered Mail ID *",
 			),
 			'options' => array(
 				'label' => 'Email',
@@ -40,7 +41,7 @@ class ForgetpasswordForm extends Form {
 			'name' => 'submit',
 			'attributes' => array(
 				'type' => 'submit',
-				'Value' => 'Send Mail',
+				'Value' => 'Send Reset password link',
 				'class'	=>	'btn btn-io mt-10',
 			),
 		));   

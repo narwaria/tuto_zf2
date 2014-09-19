@@ -12,7 +12,7 @@ return array(
             'dashboard' => array(
                 'type' => 'Literal',               
                 'options' => array(
-                    'route' => '/user/dashboard',
+                    'route' => '/dashboard',
                     'defaults' => array(
                         'controller' => 'Dashboard',
                         'action'     => 'index',
@@ -30,6 +30,11 @@ return array(
     'view_helpers' => array(
         'invokables'=> array(
             'special_purpose' => 'Dashboard\View\Helper\SpecialPurpose'  
+        )
+    ),
+     'controller_plugins' => array(
+    'invokables' => array(
+        'MyFirstPlugin' => 'Dashboard\Controller\Plugin\MyFirstPlugin',
         )
     ),
 );

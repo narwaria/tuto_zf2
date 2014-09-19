@@ -1,59 +1,63 @@
+<div class="io-header"><img src="<?php echo $this->basePath('images/logo-io.png'); ?>" alt="Interview Organiser"></div>
+<div class="io-body">
 <h3>Welcome, create your account to get started.</h3>
+
+
+
+<?php if($this->formElementErrors($form)) : ?>
+<div class="alert alert-danger" role="alert">
+<?php echo $this->formElementErrors($form); ?>
+</div>
+<?php  endif; ?>
+
+<?php  if ($this->flashMessenger()->hasMessages()): ?>
+  <div class="alert alert-success">
+            <?php      $messages = $this->flashMessenger()->getMessages(); foreach($messages as $message) {     echo $message;   } ?> 
+  </div>
+<?php endif; ?>
+
+
 <?php
 	$form = $this->form;
 	$form->prepare();
-	$form->setAttribute('action', $this->url(NULL, array('controller'=>'users', 'action' => 'rgprocess')));
+	$form->setAttribute('action', $this->url(NULL, array('controller'=>'users', 'action' => 'register')));
 	$form->setAttribute('method', 'post');
 	echo $this->form()->openTag($form);
 ?>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
               <div class="form-group">
-              	<?php echo $this->formElement($form->get('name'));
-              		  echo $this->formElementErrors($form->get('name')); ?>
-                <!-- <input type="text" placeholder="First Name *" id="" class="form-control pl-20"> -->
+              	<?php echo $this->formElement($form->get('fname'));	 ?>
               </div>
               <div class="form-group">
-              	<?php echo $this->formElement($form->get('lname'));
-              		  echo $this->formElementErrors($form->get('lname')); ?>
-                <!--<input type="text" placeholder="Last Name *" id="" class="form-control pl-20"> -->
+              	<?php echo $this->formElement($form->get('lname')); ?>
               </div>
               <div class="form-group">
-              	<?php echo $this->formElement($form->get('email'));
-              		  echo $this->formElementErrors($form->get('email')); ?>
-                <!-- <input type="email" placeholder="Email Address *" id="" class="form-control pl-20"> -->
+              	<?php echo $this->formElement($form->get('email')); ?>
               </div>
               <div class="io-form-note">Verification link will be sent to this Email ID.</div>
               <div class="form-group">
-              	<?php echo $this->formElement($form->get('password'));
-              		  echo $this->formElementErrors($form->get('password')); ?>
-                <!-- <input type="password" placeholder="Password *" id="" class="form-control pl-20"> -->
+              	<?php echo $this->formElement($form->get('password')); ?>
               </div>
               <div class="form-group">
-                <input type="password" placeholder="Confirm Password *" id="" class="form-control pl-20">
+                <?php echo $this->formElement($form->get('confirm_password')); ?>
               </div>
           </div>
           <div class="col-xs-12 col-sm-6">
             <div class="form-group">
-            	<?php echo $this->formElement($form->get('phone_number'));
-              		  echo $this->formElementErrors($form->get('phone_number')); ?>
-            <!-- <input type="phone" placeholder="Phone No." id="" class="form-control pl-20"> -->
+            	<?php echo $this->formElement($form->get('phone')); ?>
           </div>
             <div class="form-group">
-            	<?php echo $this->formElement($form->get('org_name'));
-              		  echo $this->formElementErrors($form->get('org_name')); ?>
-            <!-- <input type="text" placeholder="Organization" id="" class="form-control pl-20"> -->
+            	<?php echo $this->formElement($form->get('organisation')); ?>
           </div>
             <div class="form-group">
-            	<?php echo $this->formElement($form->get('designation_name'));
-              		  echo $this->formElementErrors($form->get('designation_name')); ?>
-            <!-- <input type="text" placeholder="Designation" id="" class="form-control pl-20"> -->
+            	<?php echo $this->formElement($form->get('designation')); ?>
           </div>
-              <div class="form-group"><img alt="CAPTCHA Image" src="images/captcha.png" id="captcha" class="captcha_image">&nbsp;&nbsp;<a href="#"><i class="fa fa-refresh"></i></a>
+              <div class="form-group"><img alt="CAPTCHA Image" src="<?php echo $this->basePath('images/captcha.png'); ?>" id="captcha" class="captcha_image">&nbsp;&nbsp;<a href="#"><i class="fa fa-refresh"></i></a>
             <input type="text" placeholder="Type characters from the image *" id="" class="form-control mt-10 pl-20">
           </div>
             <button class="btn btn-io mt-10" type="submit">Sign Up</button>
           </div>
-          </div>
-          
+          </div>          
 <?php echo $this->form()->closeTag() ?>
+</div>

@@ -11,44 +11,84 @@ use ManageComponent\Form\TopicFormSearch;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
+use Zend\ServiceManager;
+
 class TopicController extends AbstractActionController
 {
     protected $topicTable; 
-    protected $technologyTable;	
-    protected $authservice;    
-    public function indexAction()
-    {
+    protected $skillTable;	
+    protected $authservice;
+    
+    public function __construct() { 
+        //echo $sm = $this->getServiceLocator()->get('ManageComponent\Model\SkillTable');
+        //$this->$skillTable = $sm->get('ManageComponent\Model\SkillTable');
+    }
+    
+    public function indexAction() {
+        
+        $this->topicTable   = $this->getServiceLocator()->get('TopicTable');
+        $this->skillTable   = $this->getServiceLocator()->get('SkillTable'); 
+        
         $authResponse = $this->getAuthService()->getStorage()->read();
+        
         $this->layout()->setVariable('auth',$authResponse);
         $this->layout()->setVariable('menuid',3);
     	$this->layout('layout/dashboard');
+        
+        //dropdownd array values
+        $departmentArray    = $this->getDepartmentList();
+        $designationrray    = $this->getDesignationList();
+        $skillArray         = $this->getSkillList();
+        
+        //form submited values
+        $topic_name         = trim($this->params()->fromQuery('topic_name'));
+        
+        //set preserve value to view
     	$TopicFormSearch = new TopicFormSearch();
-    	$topics = $this->getTopicTable()->fetchAll();
+        $TopicFormSearch->get('topic_name')->setValue($topic_name);
+        $TopicFormSearch->get('departments')->setValueOptions($departmentArray);
+        $TopicFormSearch->get('designations')->setValueOptions($designationrray);
+        $TopicFormSearch->get('skills')->setValueOptions($skillArray);
+    	
+        $topics = $this->topicTable->fetchAll($topic_name, TRUE);
+        $topics->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
+        $topics->setItemCountPerPage(2);
+        
         return new ViewModel(array(
-                    'form'=>$TopicFormSearch,
-                    'order_by' => '',
-                    'order' => '',
-                    'page' => '',
-                    'paginator' => '',
-                    'search_by'=>'',
-                    'topics'=>$topics
-                )); 
+            'form'=>$TopicFormSearch,
+            'order_by' => '',
+            'order' => '',
+            'page' => '',
+            'paginator' => '',
+            'search_by'=>'',
+            'topic_name' => $topic_name,
+            'topics'=>$topics
+        )); 
     }
-    public function addAction()
-    {
+    
+    public function addAction() {
+        
+        $this->topicTable   = $this->getServiceLocator()->get('TopicTable');
+        $this->skillTable   = $this->getServiceLocator()->get('SkillTable'); 
+        
         $authResponse = $this->getAuthService()->getStorage()->read();
         $this->layout()->setVariable('auth',$authResponse);
         $this->layout()->setVariable('menuid',3);
         $this->layout('layout/dashboard'); //  Set the layout
-        $technologyArray = $this->getTechnologyList();     	 
+        
+        
+        $skillArray = $this->getSkillList();  
+        
     	$TopicForm = new TopicForm();              
-        $TopicForm->get('technologies')->setValueOptions($technologyArray);
+        $TopicForm->get('skill')->setValueOptions($skillArray);
         $request = $this->getRequest();   
        
         if ($request->isPost()) {
+            
             $topic = new Topic();            
             $TopicForm->setInputFilter($topic->getInputFilter());
             $TopicForm->setData($request->getPost());            
+            
             if ($TopicForm->isValid()) {
                 $topic->exchangeArray($TopicForm->getData());
                 $this->getTopicTable()->saveTopic($topic);
@@ -65,8 +105,7 @@ class TopicController extends AbstractActionController
         return array('form' => $TopicForm);    	
     }
 
-    public function editAction()
-    {
+    public function editAction() {
         $this->layout('layout/dashboard');
         $topic_id = (int) $this->params()->fromRoute('topic_id', 0);
         if ($topic_id==0) {
@@ -103,43 +142,47 @@ class TopicController extends AbstractActionController
                 return $this->redirect()->toRoute('topic');
             }
             
-        }                
+        }
         return array(
-                'topic_id'  =>  $topic_id,
-                'form'      =>  $TopicForm
-            );
+            'topic_id'  =>  $topic_id,
+            'form'      =>  $TopicForm
+        );
     }
 
-    public function deleteAction()
-    {
+    public function deleteAction() {
         return new ViewModel();
     }
 
-    public function getTechnologyList(){
-        $technologiesValues =   $this->getTechnologyTable()->fetchAll(); // get the technology names
-        $technologyArray    =   array();
-        foreach($technologiesValues as  $technology){
-            $technologyArray[$technology["id"]]     =   $technology["technology"];        
+    public function getDepartmentList(){ 
+        $skillsValues =   $this->skillTable->fetchAll(); // get the skill names
+        
+        $skillArray    =   array();
+        foreach($skillsValues as  $skill){
+            $skillArray[$skill["skill_id"]]     =   $skill["skill_name"];        
         }
-        return $technologyArray;
+        return $skillArray;
     }
-
-    public function getTopicTable()
-    {       
-        if (!$this->topicTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->topicTable = $sm->get('ManageComponent\Model\TopicTable');
+    
+    public function getDesignationList(){ 
+        $skillsValues =   $this->skillTable->fetchAll(); // get the skill names
+        
+        $skillArray    =   array();
+        foreach($skillsValues as  $skill){
+            $skillArray[$skill["skill_id"]]     =   $skill["skill_name"];        
         }
-        return $this->topicTable;
+        return $skillArray;
     }
-    public function getTechnologyTable()
-    {       
-        if (!$this->technologyTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->technologyTable = $sm->get('ManageComponent\Model\TechnologyTable');           
+    
+    public function getSkillList(){ 
+        $skillsValues =   $this->skillTable->fetchAll(); // get the skill names
+        
+        $skillArray    =   array();
+        foreach($skillsValues as  $skill){
+            $skillArray[$skill["skill_id"]]     =   $skill["skill_name"];        
         }
-        return $this->technologyTable;
+        return $skillArray;
     }
+    
     public function getAuthService() {
         if (! $this->authservice) {
             $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');

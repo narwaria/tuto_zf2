@@ -1,71 +1,122 @@
 <?php
-$title = 'My Topic';
+$title = 'Manage Topic';
 $this->headTitle($title);
 ?>
-<h1><?php echo $this->escapeHtml($title); ?></h1>
+<h1 class="page-title"><?php echo $this->escapeHtml($title); ?></h1>
 
+<div class="page-bar">
+  <ul class="page-breadcrumb">
+    <li><i class="fa fa-home"></i><a href="#">Home</a><i class="fa fa-angle-right"></i></li>
+    <li><a href="#">Component Management</a><i class="fa fa-angle-right"></i></li>
+    <li>Manage Topic</li>
+  </ul>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 text-right">
+    <a href="<?php echo $this->url('topic', array('action' => 'add'));?>" class="btn btn-default">Add Topic</a>
+  </div>
+</div>
+<div class="io-search-filter row">
+  <div class="col-xs-6 col-sm-6">
+    <h3>Search</h3>
+  </div>
+  <div class="col-xs-6 col-sm-6 text-right"><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Show / Hide</a></div>
+</div>
+<div class="io-filter-block panel-collapse collapse in" id="collapseOne">
+  <div class="row">
+    <?php 
+      $form = $this->form;
+      $form->setAttribute('action', $this->url('topic'));
+      $form->prepare();
 
-
-<p><a href="<?php
-echo $this->url('topic', array(
-    'action' => 'add'));
-?>">Add new Topic</a></p>
-
-<?php 
-$form = $this->form;
-$form->setAttribute('action', $this->url('topic'));
-$form->prepare();
-
-echo $this->form()->openTag($form);
-echo $this->formCollection($form);
-echo $this->form()->closeTag();
-
-?>
-<table class="table">
-    <tr>
-        <th>
-            Topic Name
-        </th>
-       <!--  <th>
-            Topic Description    
-        </th> -->
-        <th>Action</th>
-    </tr>
-    <?php if($this->topics) : ?>
-    <?php foreach ($this->topics as $topic) :    
-    ?>
-        <tr>
+      echo $this->form()->openTag($form);
+      //echo $this->formCollection($form);
+      
+      ?>
+      
+    <div class="col-xs-12 col-sm-4 col-md-2">
+        <label>Search Term</label>
+        <?php echo $this->formElement($form->get('topic_name')); ?>
+        <!--<input type="text" class="form-control" id="" placeholder="Topic Name">-->
+    </div>
+    
+    <div class="col-xs-12 col-sm-3 col-md-2">
+        <label>Select Department</label>
+        <?php echo $this->formElement($form->get('departments')); ?>
+    </div>
+      
+    <div class="col-xs-12 col-sm-3 col-md-2">
+        <label>Select Designation</label>
+        <?php echo $this->formElement($form->get('designations')); ?>
+    </div>
+      
+    <div class="col-xs-12 col-sm-3 col-md-2">
+        <label>Select Skill</label>
+        <?php echo $this->formElement($form->get('skills')); ?>
+    </div>
+    
+    <div class="col-xs-12 col-sm-2 col-md-2">
+      <label>&nbsp;</label>
+      <div class="form-group">
+        <?php echo $this->formElement($form->get('submit')); ?>
+        <!--<button class="btn btn-io" type="submit">Search</button>-->
+      </div>
+    </div>
+    
+    <?php echo $this->form()->closeTag(); ?>
+    
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="text-center" width="10%">S. No.</th>
+            <th width="30%">Name</th>
+            <th width="40%">Department > Designation > Skill</th>
+            <!--<th>Role</th>
+            <th>Status</th>-->
+            <th width="20%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php
+        if($this->topics) :
+            foreach ($this->topics as $topic) : 
+        ?>
+          <tr>
+            <td class="text-center">1</td>
             <td><?php echo $this->escapeHtml($topic->topic_name); ?></td>
-           <!-- <td><?php echo $this->escapeHtml($topic->topic_description); ?></td> -->
+            <td>IT > SSE > IT </td>
+            <!--<td>Human Resource</td>
+            <td>Active / Inactive</td>-->
             <td>
-                <a href="<?php echo $this->url('topic', array('action' => 'edit', 'topic_id' => $topic->topic_id));
-        ?>">Edit</a> | <a href="<?php echo $this->url('topic', array('action' => 'delete', 'topic_id' => $topic->topic_id));
-        ?>">Delete</a>
+                <ul class="quick-links">
+                    <li><a href="<?php echo $this->url('topic', array('action' => 'edit', 'topic_id' => $topic->topic_id)); ?>"><i class="fa fa-edit"></i>Edit</a></li>
+                    <li><a href="<?php echo $this->url('topic', array('action' => 'delete', 'topic_id' => $topic->topic_id)); ?>"><i class="fa fa-trash-o"></i>Delete</a></li>
+                </ul>
             </td>
-        </tr>
-    <?php endforeach; ?>
-    <?php endif; ?>
-
-
-    <?php if($this->paginator) : ?>
-    <?php foreach ($paginator as $topic) :    
+          </tr>
+        <?php 
+            endforeach;
+        endif; 
+        ?>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination-wrap">
+    <?php // add at the end of the file after the table
+        
+        echo $this->paginationControl(
+            $this->topics,
+            'Sliding',
+            array('paginator.phtml', 'Topic'), 
+            array('route' => 'topic', 'query'=>'&topic_name='.$this->topic_name.'&topic_desc='.$this->topic_name)
+        );
+        
     ?>
-        <tr>
-            <td><?php echo $this->escapeHtml($topic->topic_name); ?></td>
-            <!--<td><?php echo $this->escapeHtml($topic->topic_description); ?></td> -->
-            <td>
-                <a href="<?php echo $this->url('topic', array('action' => 'edit', 'topic_id' => $topic->topic_id));
-        ?>">Edit</a> | <a href="<?php echo $this->url('topic', array('action' => 'delete', 'topic_id' => $topic->topic_id));
-        ?>">Delete</a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    <?php endif; ?>
-</table>
-<?php
-/*
-    echo $this->paginationControl(
-            $paginator, 'Sliding', 'paginator-slide', array('order_by' => $order_by, 'order' => $order,'search_by'=>$search_by)
-    );
-    */
-    ?>
+    </div>
+  </div>
+</div>

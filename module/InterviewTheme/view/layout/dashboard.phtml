@@ -50,7 +50,7 @@
       <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
       <a href="#" class="navbar-brand"><img src="<?php echo $this->basePath('images/logo-io-s.png'); ?>" alt="Interview Organiser"></a> </div>
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome <?php echo $this->auth["name"]; ?> <span class="caret"></span></a>
+      <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome <?php echo $this->auth["fname"]; ?> <span class="caret"></span></a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="#">Account Settings</a></li>
           <li><a href="#">Help</a></li>
@@ -66,12 +66,11 @@
 <!-- BEGIN CONTAINER -->
 <div class="page-container"> 
   <!-- BEGIN SIDEBAR --> 
-  <?php  if(isset($this->auth["name"])){
+  <?php  if(isset($this->auth["user_id"])){
           echo $this->partial('interview-theme/interview-theme/sidebar.phtml'); 
       }
   ?>
   <!-- END SIDEBAR --> 
-
   <!-- BEGIN CONTENT -->
   <div class="page-content-wrapper">
       <div class="page-content">

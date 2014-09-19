@@ -9,7 +9,6 @@ return array(
     'modules' => array(
         'Dashboard',
         'ManageComponent',
-        'Navigation',
         'Users',
         'InterviewTheme'
     ),

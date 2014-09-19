@@ -10,11 +10,20 @@ use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
 class DashboardController extends AbstractActionController
 {
+    protected $departmentTable;
+    protected $designationTable;
+    protected $skillTable;
     protected $topicTable;
     protected $categoryTable;
     protected $authservice;
-    public function indexAction()
-    {
+    
+    public function indexAction() {
+		 echo $plugin = $this->MyFirstPlugin()->doSomething();
+                
+		$this->departmentTable	= $this->getServiceLocator()->get('DepartmentTable'); 
+		$this->designationTable = $this->getServiceLocator()->get('DesignationTable');
+		$this->skillTable		= $this->getServiceLocator()->get('SkillTable'); 
+		$this->topicTable		= $this->getServiceLocator()->get('TopicTable');
         
         $authResponse = $this->getAuthService()->getStorage()->read();
 
@@ -24,30 +33,32 @@ class DashboardController extends AbstractActionController
         
     	
         //$topic= new TopicTable();
-        $departmentsCount    = $this->getCategoryTable()->getdepartmentCount();
-        $designationsCount   = $this->getCategoryTable()->getdesignationCount();
-        
-         $topicsCount = $this->getTopicTable()->gettopicCount();         
-
-        $components = array("Department" => isset($departmentsCount->departments_count)?$departmentsCount->departments_count:0,
-                            "Designation"=> isset($designationsCount->designations_count)?$designationsCount->designations_count:0,
-                            "Technology"=>0,
-                            "Topic"=>isset($topicsCount)?$topicsCount:0);
+        $departmentsCount	= $this->departmentTable->getDepartmentCount();
+        $designationsCount	= $this->designationTable->getDesignationCount();
+        $skillsCount		= $this->skillTable->getSkillCount();
+        $topicsCount		= $this->topicTable->getTopicCount();
         
 
+        $components = array("Department" => $departmentsCount?$departmentsCount:0,
+                            "Designation"=> $designationsCount?$designationsCount:0,
+                            "Skill"=> $skillsCount?$skillsCount:0,
+                            "Topic"=> $topicsCount?$topicsCount:0);
+        
 
-        $topics = $this->getTopicTable()->fetchAll();
 
-
-    	$this->layout()->setVariable('auth',$authResponse);
-    	$this->layout('layout/dashboard');                
-        return new ViewModel(array("topics"=>$topics,'components'=>$components,'auth'=>$authResponse));
+        $topics = $this->topicTable->fetchAll();
+        
+        $this->layout()->setVariable('auth',$authResponse);
+    	$this->layout('layout/dashboard'); 
+    	               
+        return new ViewModel(array('topics'=>$topics,'components'=>$components,'auth'=>$authResponse));
+        
     }
 
     public function getAuthService() {
         if (! $this->authservice) {
             $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'user','email','password', 'MD5(?)');
+            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'tbl_user','email','password', 'MD5(?)');
             $authService = new AuthenticationService();
             $authService->setAdapter($dbTableAuthAdapter);
             $this->authservice = $authService;
@@ -55,21 +66,5 @@ class DashboardController extends AbstractActionController
         return $this->authservice;
     }
     
-    public function getTopicTable()
-    {       
-        if (!$this->topicTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->topicTable = $sm->get('ManageComponent\Model\TopicTable');
-        }        
-        return $this->topicTable;
-    } 
-    public function getCategoryTable()
-    {       
-        if (!$this->categoryTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->categoryTable = $sm->get('ManageComponent\Model\CategoryTable');
-        }        
-        return $this->categoryTable;
-    }  
 
 }

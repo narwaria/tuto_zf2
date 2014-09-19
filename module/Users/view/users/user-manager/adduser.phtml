@@ -1,0 +1,53 @@
+<div class="io-body">
+<h3>Welcome, create your account to get started.</h3>
+<?php if($this->formElementErrors($form)) : ?>
+<div class="alert alert-danger" role="alert">
+<?php echo $this->formElementErrors($form); ?>
+</div>
+<?php  endif; ?>
+<?php  if ($this->flashMessenger()->hasMessages()): ?>
+  <div class="alert alert-success">
+            <?php $messages = $this->flashMessenger()->getMessages(); foreach($messages as $message) {     echo $message;   } ?> 
+  </div>
+<?php endif; ?>
+<?php
+	$form = $this->form;
+	$form->prepare();
+	$form->setAttribute('action', $this->url(NULL, array('controller'=>'users', 'action' => 'adduser')));
+	$form->setAttribute('method', 'post');
+	echo $this->form()->openTag($form);
+?>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('fname'));	 ?>
+              </div>
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('lname')); ?>
+              </div>
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('email')); ?>
+              </div>
+              <div class="io-form-note">Verification link will be sent to this Email ID.</div>
+              <div class="form-group">
+              	<?php echo $this->formElement($form->get('password')); ?>
+              </div>
+              <div class="form-group">
+                <?php echo $this->formElement($form->get('confirm_password')); ?>
+              </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+            	<?php echo $this->formElement($form->get('phone')); ?>
+          </div>
+            <div class="form-group">
+            	<?php echo $this->formElement($form->get('organisation')); ?>
+          </div>
+            <div class="form-group">
+            	<?php echo $this->formElement($form->get('designation')); ?>
+          </div>
+            <button class="btn btn-io mt-10" type="submit">Add User</button>
+          </div>
+          </div>          
+<?php echo $this->form()->closeTag() ?>
+</div>
