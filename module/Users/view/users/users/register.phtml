@@ -43,11 +43,10 @@
             <div class="form-group">
             	<?php echo $this->formElement($form->get('organisation')); ?>
           </div>
-            <div class="form-group">
+          <div class="form-group">
             	<?php echo $this->formElement($form->get('designation')); ?>
-          </div>
-              <div class="form-group"><img alt="CAPTCHA Image" src="<?php echo $this->basePath('images/captcha.png'); ?>" id="captcha" class="captcha_image">&nbsp;&nbsp;<a href="#"><i class="fa fa-refresh"></i></a>
-            <input type="text" placeholder="Type characters from the image *" id="" class="form-control mt-10 pl-20">
+          </div>             
+              <div class="form-group imgcaptcha"><?php echo $this->formElement($form->get('captcha')); ?>&nbsp;&nbsp;<a  id="refreshcaptcha" ><i class="fa fa-refresh"></i></a>           
           </div>
             <button class="btn btn-io mt-10" type="submit">Sign Up</button>
           </div>

@@ -2,12 +2,26 @@
 
 namespace Users\Form;
 use Zend\Form\Form;
-
+use Zend\Form\Element;
+use Zend\Captcha\Image;
+use Zend\Captcha\AdapterInterface;
 class RegisterForm extends Form {
 	public function __construct($name = null) {		
 		parent::__construct('Register');		
 		$this->setAttribute('method', 'post');
 		$this->setAttribute('enctype','multipart/form-data');
+                
+                 $this->captcha = new Image(array(
+                        'expiration' => '300',
+                        'wordlen' => '7',
+                        'font' => 'data/fonts/arial.ttf',
+                        'fontSize' => '45',
+                        'wordLen' => 5,
+                        'height' => '100',
+                        'width' => '250',
+                        'imgDir' => 'public/captcha',
+                        'imgUrl' => '/captcha'
+                    ));
 		
 		$this->add(array(
 			'name' => 'fname',
@@ -107,6 +121,18 @@ class RegisterForm extends Form {
 				'label' => 'Phone Number',
 			),			
 		)); 
+                 $this->add(array(
+                        'name' => 'captcha',
+                        'options' => array(
+                            'label' => 'Verification',
+                            'captcha' => $this->captcha,
+                        ),
+                        'attributes' => array(
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Type characters from the image *",
+			),
+                        'type'  => 'Zend\Form\Element\Captcha',
+                ));
 		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(

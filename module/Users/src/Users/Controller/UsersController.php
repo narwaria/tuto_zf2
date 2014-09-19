@@ -5,6 +5,8 @@ namespace Users\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+use Zend\View\Model\JsonModel;
+
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 //use Zend\Mail;
@@ -51,6 +53,18 @@ class UsersController extends AbstractActionController {
 		return $view;
 		}		
     }
+    
+   public function refreshAction(){
+        $form = new RegisterForm();
+        $captcha = $form->get('captcha')->getCaptcha();
+        $data = array();
+        $data['id']  = $captcha->generate();
+        $data['src'] = $captcha->getImgUrl() .
+                       $captcha->getId() .
+                       $captcha->getSuffix();       
+        $json = new JsonModel($data);
+        return $json;
+    } 
        
     public function loginAction() { 
     	if ($this->getAuthService()->hasIdentity()){
