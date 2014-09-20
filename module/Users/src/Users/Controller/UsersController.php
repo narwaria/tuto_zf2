@@ -96,7 +96,7 @@ class UsersController extends AbstractActionController {
 		                	$this->renderer 		= 	$this->getServiceLocator()->get('ViewRenderer');  
 							$mailcontent			=	$this->renderer->render('mails/AttemptResetPassword', null);
 							$encryptedresetlink		=	base64_encode("{$usersDetail->id}|".time());
-							$this->getUserTable()->usertokeninsert($usersDetail->user_id,$encryptedresetlink); //insert into token table  encryped data
+							$this->userTable->usertokeninsert($usersDetail->user_id,$encryptedresetlink); //insert into token table  encryped data
 							$ResetLink				=	"http://{$_SERVER["SERVER_NAME"]}/user/reset/{$encryptedresetlink}"; 
 
 
@@ -107,7 +107,7 @@ class UsersController extends AbstractActionController {
 		                }else{
 		                	$this->flashMessenger()->setNamespace('warning')->addMessage('Invalid password');		                	
 		                }
-		                $this->getUserTable()->updateLastLogin($dataArr);
+		                $this->userTable->updateLastLogin($dataArr);
 		            } else {
 		            	$this->flashMessenger()->setNamespace('warning')->addMessage('Your are not registered with us');		               
 		        	}		            
@@ -135,7 +135,7 @@ class UsersController extends AbstractActionController {
 			));            
             //update last login attemp
             $logintdetailsArray = array('user_id'=>$usersDetail->user_id, 'log_last_attmp'=>date("Y-m-d H:i:s"), 'log_failed_count'=>'0');
-            $this->getUserTable()->updateLastLogin($logintdetailsArray);            
+            $this->userTable->updateLastLogin($logintdetailsArray);            
 			return $this->redirect()->toRoute('dashboard', array( 'controller' => 'Dashboard','action' =>  'index'));
 			}
 		}
