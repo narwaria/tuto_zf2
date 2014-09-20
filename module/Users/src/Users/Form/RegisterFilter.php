@@ -24,7 +24,17 @@ class RegisterFilter extends InputFilter {
                             \Zend\Validator\StringLength::TOO_LONG => 'First name field must be no longer than 50 characters in length',
                         ),
 				),
-			)),
+			),
+                 array('name' => 'Regex',
+                        'options' => array(
+                        'pattern' => '/^[a-z]{1,50}$/i',
+                        'messages' => array(
+                            "regexNotMatch" => 'Invalid input, only a-z characters allowed',
+                            ),
+                        ),
+                    ),
+                            
+                            ),
 		));
 
 		$this->add(array(

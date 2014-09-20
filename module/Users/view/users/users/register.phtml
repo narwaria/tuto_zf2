@@ -21,6 +21,8 @@
           <div class="col-xs-12 col-sm-6">
               <div class="form-group">
               	<?php echo $this->formElement($form->get('fname'));	 ?>
+                <?php //echo $this->formElementErrors($form->get('fname'), array('class' => 'your-class-here')) ?>
+                <?php //echo $this->formElementErrors($form->get('fname'), array('class' => "error")); ?>
               </div>
               <div class="form-group">
               	<?php echo $this->formElement($form->get('lname')); ?>
