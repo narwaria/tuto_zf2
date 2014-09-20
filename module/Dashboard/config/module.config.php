@@ -12,7 +12,7 @@ return array(
             'dashboard' => array(
                 'type' => 'Literal',               
                 'options' => array(
-                    'route' => '/user/dashboard',
+                    'route' => '/dashboard',
                     'defaults' => array(
                         'controller' => 'Dashboard',
                         'action'     => 'index',

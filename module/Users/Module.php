@@ -22,7 +22,7 @@ class Module
             ),
         );
     }
-    
+    /*
     public function getServiceConfig() {
 		return array(
 			'factories' => array(
@@ -39,6 +39,33 @@ class Module
 				},
 			),
 		);
-	}
+	} */
+
+	public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Users\Model\UserTable' =>  function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new UserTable($dbAdapter);
+                    return $table;
+                },
+                'UserTable' =>  function($sm) {
+                  $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                  $table = new UserTable($dbAdapter);
+                  return $table;
+              }
+            ),
+            
+        );
+    }
+    public function getViewHelperConfig()
+    {
+        return array(
+            'invokables' => array(
+                'form_element' => 'Users\Form\View\Helper\ErrorFormElement',
+            ),
+        );
+    }
 	
 }

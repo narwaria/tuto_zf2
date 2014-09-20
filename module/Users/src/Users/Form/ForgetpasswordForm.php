@@ -6,7 +6,7 @@ use Zend\Form\Form;
 class ForgetpasswordForm extends Form {
 	public function __construct($name = null) {
 		
-		parent::__construct('Login');
+		parent::__construct('ForgetPassword');
 		
 		$this->setAttribute('method', 'post');
 		$this->setAttribute('enctype','multipart/form-data');
@@ -18,7 +18,8 @@ class ForgetpasswordForm extends Form {
 			'attributes' => array(
 				'type' => 'email',
 				'required' => 'required',
-				//'class' => 'form-control',
+				'class'	=>'form-control pl-20',
+				'placeholder'=>"Email ID of your Account *",
 			),
 			'options' => array(
 				'label' => 'Email',
@@ -40,7 +41,7 @@ class ForgetpasswordForm extends Form {
 			'name' => 'submit',
 			'attributes' => array(
 				'type' => 'submit',
-				'Value' => 'Send Mail',
+				'Value' => 'Send Reset password link',
 				'class'	=>	'btn btn-io mt-10',
 			),
 		));   

@@ -1,0 +1,68 @@
+<?php
+
+$title = 'Add / Edit skill';
+$this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('skill', array('action' => 'edit', 'skill_id'     => $this->skill_id,)));
+$form->setAttribute('class', "form-horizontal");
+$form->setAttribute('role', "form");
+$form->prepare();
+?>
+
+<h1 class="page-title"><?php echo $this->escapeHtml($title); ?></h1>
+
+<div class="page-bar">
+  <ul class="page-breadcrumb">
+    <li><i class="fa fa-home"></i><a href="/dashboard">Home</a><i class="fa fa-angle-right"></i></li>
+    <li><a href="/skill">Manage Skill</a><i class="fa fa-angle-right"></i></li>
+    <li>Edit Skill</li>
+  </ul>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12 col-sm-12">
+    <div class="io-db-block">
+      <div class="io-db-block-header">Add / Edit Interview Set</div>
+      <div class="io-db-block-content">
+          
+        <?php if($this->formElementErrors($form)) : ?>
+        <div class="alert alert-danger" role="alert">
+        <?php echo $this->formElementErrors($form); ?>
+        </div>
+        <?php  endif; ?>
+        
+        <?php
+            echo $this->form()->openTag($form);
+            echo $this->formHidden($form->get('skill_id'));
+        ?>
+
+		<div class="form-body">
+			
+            <div class="form-group">
+              <?php echo $this->formLabel($form->get('skill_name')); ?>
+              <div class="col-xs-12 col-md-5 col-lg-3">
+                  <?php echo $this->formElement($form->get('skill_name')); ?>  
+              </div>
+            </div>
+             
+            <div class="form-actions">
+              <div class="row">
+                <div class="col-md-offset-3 col-md-9">
+                  <?php 
+                    //echo $this->formElement($form->get('submit')); 
+                    //echo $this->formElement($form->get('cancel')); 
+                  ?>
+					<button class="btn btn-io" type="submit">Update</button>
+					<button class="btn btn-io" type="button" onclick="javascript: window.history.back();">Cancel</button>
+                </div>
+              </div>
+            </div>
+            
+		</div>
+        <?php echo $this->form()->closeTag(); ?>
+      </div>
+    </div>
+  </div>
+</div>

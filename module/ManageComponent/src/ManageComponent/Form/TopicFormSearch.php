@@ -10,31 +10,34 @@ class TopicFormSearch extends Form
     {
         // we want to ignore the name passed
         parent::__construct('topic');
-        $this->setAttribute('method', 'post');        
+        $this->setAttribute('method', 'get');        
         $this->add(array(
             'name' => 'topic_name',
             'attributes' => array(
                 'type'  => 'text',
+                'placeholder' => 'Topic Name',
+                'class' => 'form-control',
             ),
             'options' => array(
                 'label' => 'Topic Name',
             ),
         ));
-        /* $this->add(array(
-            'name' => 'topic_description',
-            'attributes' => array(
-                'type'  => 'text',
-            ),
-            'options' => array(
-                'label' => 'Topic Description',
-            ),
-        ));  */
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'skills',
+             'attributes' => array(
+                 'class' => 'form-control',
+             ),
+        ));
+        
         $this->add(array(
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
                 'value' => 'Search Topic',
                 'id' => 'submitbutton',
+                'class' => 'btn btn-io',
             ),
         ));
     }

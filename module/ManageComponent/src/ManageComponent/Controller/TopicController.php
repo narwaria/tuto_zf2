@@ -5,57 +5,116 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 use ManageComponent\Model\Topic;
+
 use ManageComponent\Form\TopicForm;
 use ManageComponent\Form\TopicFormSearch;
+use ManageComponent\Form\TopicFilter;
 
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
+//use Zend\ServiceManager;
+
 class TopicController extends AbstractActionController
 {
-    protected $topicTable; 
-    protected $technologyTable;	
-    protected $authservice;    
-    public function indexAction()
-    {
-        $authResponse = $this->getAuthService()->getStorage()->read();
-        $this->layout()->setVariable('auth',$authResponse);
-        $this->layout()->setVariable('menuid',3);
-    	$this->layout('layout/dashboard');
-    	$TopicFormSearch = new TopicFormSearch();
-    	$topics = $this->getTopicTable()->fetchAll();
-        return new ViewModel(array(
-                    'form'=>$TopicFormSearch,
-                    'order_by' => '',
-                    'order' => '',
-                    'page' => '',
-                    'paginator' => '',
-                    'search_by'=>'',
-                    'topics'=>$topics
-                )); 
+    protected $departmentTable;
+    protected $designationTable;
+    protected $skillTable;
+    protected $topicTable;	
+    protected $authservice;
+    protected $config;
+    protected $pagin;
+    protected $page;
+
+
+    public function __construct() { 
+        //echo $sm = $this->getServiceLocator()->get('ManageComponent\Model\SkillTable');
+        //$this->$skillTable = $sm->get('ManageComponent\Model\SkillTable');
     }
-    public function addAction()
-    {
+    
+    public function indexAction() {
+        
+        //global setting
+        $config = $this->getServiceLocator()->get('Config');
+        $pagin  = $config['common']['items_per_page']; 
+        
+		$this->skillTable	= $this->getServiceLocator()->get('SkillTable'); 
+		$this->topicTable	= $this->getServiceLocator()->get('TopicTable');
+        $this->page			= (int)$this->params()->fromQuery('page', 1);
+        
         $authResponse = $this->getAuthService()->getStorage()->read();
+
+        $this->layout()->setVariable('auth',$authResponse);
+        $this->layout()->setVariable('menuid',2);
+    	$this->layout('layout/dashboard');
+        
+        //dropdownd array values
+        $skillArray         = $this->skillTable->getSkillList();
+        
+        //form submited values
+        $topic_name         = trim($this->params()->fromQuery('topic_name'));
+        
+        //set preserve value to view
+    	$TopicFormSearch = new TopicFormSearch();
+        $TopicFormSearch->get('topic_name')->setValue($topic_name);
+        $TopicFormSearch->get('skills')->setValueOptions($skillArray);
+    	
+        // pagination
+        $topics = $this->topicTable->fetchAll($topic_name, TRUE);
+        $topics->setCurrentPageNumber($this->page);
+        $topics->setItemCountPerPage($pagin);
+        
+        return new ViewModel(array(
+            'form'=>$TopicFormSearch,
+            'order_by' => '',
+            'order' => '',
+            'page' => $this->page,
+            'paginator' => '',
+            'search_by'=>'',
+            'topic_name' => $topic_name,
+            'topics'=>$topics
+        ));
+    }
+    
+    public function addAction() {
+        
+        $this->topicTable   = $this->getServiceLocator()->get('TopicTable');
+        $this->skillTable   = $this->getServiceLocator()->get('SkillTable'); 
+        
+        $authResponse = $this->getAuthService()->getStorage()->read();
+        
         $this->layout()->setVariable('auth',$authResponse);
         $this->layout()->setVariable('menuid',3);
         $this->layout('layout/dashboard'); //  Set the layout
-        $technologyArray = $this->getTechnologyList();     	 
-    	$TopicForm = new TopicForm();              
-        $TopicForm->get('technologies')->setValueOptions($technologyArray);
+        
+        $skillArray         = $this->skillTable->getSkillList();
+        
+    	$TopicForm = new TopicForm();
+        $TopicForm->get('skill')->setValueOptions($skillArray);
+        
         $request = $this->getRequest();   
        
         if ($request->isPost()) {
-            $topic = new Topic();            
-            $TopicForm->setInputFilter($topic->getInputFilter());
-            $TopicForm->setData($request->getPost());            
+            
+            $request->getPost()->set('client_id', $authResponse['client_id']);
+            $request->getPost()->set('created_by_user_id', $authResponse['user_id']);
+            $request->getPost()->set('created_date', date("Y-m-d H:i:s"));
+            
+            $topicFilter    = new TopicFilter();
+			$TopicForm->setInputFilter($topicFilter);
+			$TopicForm->setData($request->getPost());
+            
             if ($TopicForm->isValid()) {
+                
+                $topic = new Topic();
                 $topic->exchangeArray($TopicForm->getData());
-                $this->getTopicTable()->saveTopic($topic);
-                /* @var $lastInsertTopicID Topic */
-                $lastInsertTopicID = $this->getTopicTable()->lastInsertValue;
-                foreach($request->getPost()->technologies as $technologyID){
-                    $this->getTopicTable()->saveTopicTechnologyRelation($lastInsertTopicID,$technologyID);
+                
+                $this->topicTable->saveTopic($topic);
+                
+                $lastInsertTopicID = $this->topicTable->lastInsertValue;
+                
+                foreach($request->getPost()->skill as $skillID){
+                    $this->topicTable->saveSkillByTopic($lastInsertTopicID,$skillID);
                 }
                 // Redirect to list of topic
                 return $this->redirect()->toRoute('topic');
@@ -65,81 +124,67 @@ class TopicController extends AbstractActionController
         return array('form' => $TopicForm);    	
     }
 
-    public function editAction()
-    {
+    public function editAction() {
+        
+        $this->topicTable   = $this->getServiceLocator()->get('TopicTable');
+        $this->skillTable   = $this->getServiceLocator()->get('SkillTable'); 
+        
+        $authResponse = $this->getAuthService()->getStorage()->read();
+        $this->layout()->setVariable('auth',$authResponse);
+        $this->layout()->setVariable('menuid',3);
         $this->layout('layout/dashboard');
-        $topic_id = (int) $this->params()->fromRoute('topic_id', 0);
+        
+        $topic_id   = (int)$this->params()->fromRoute('topic_id', 0);
+
         if ($topic_id==0) {
             return $this->redirect()->toRoute('topid', array( 'action' => 'add'));
         }
-        $technologyArray = $this->getTechnologyList();
-        $topic  = $this->getTopicTable()->getTopic($topic_id);
-
-        $technlogiesArray           =   $this->getTopicTable()->getTopicTechnologyRelation($topic_id); 
-        $selectedTechnologies       =   array();
-        foreach ($technlogiesArray as $key => $value) {
-            $selectedTechnologies[] =   (int)$value["tech_id"];
+        $skillArray		= $this->skillTable->getSkillList();
+        $topicDetail	= $this->topicTable->getTopic($topic_id);
+        $userSkillArray = $this->topicTable->getSkillByTopic($topic_id);
+        
+        $userSkills     =   array();
+        foreach ($userSkillArray as $u_s_key => $u_s_value) {
+            $userSkills[] =   (int)$u_s_value["skill_id"];
         }
-
+        
         $TopicForm  = new TopicForm();
-        $request = $this->getRequest();  
-        $TopicForm->bind($topic);
-        $TopicForm->get('technologies')->setValue($selectedTechnologies);
-        $TopicForm->get('technologies')->setValueOptions($technologyArray);     
+        $request    = $this->getRequest();  
+        $TopicForm->bind($topicDetail);
+        $TopicForm->get('skill')->setValue($userSkills);
+        $TopicForm->get('skill')->setValueOptions($skillArray);
+        $TopicForm->get('page')->setValue($this->page);
         $TopicForm->get('submit')->setAttribute('value', 'Edit Topic');
 
         if ($request->isPost()) {
-            $topic = new Topic();            
-            $TopicForm->setInputFilter($topic->getInputFilter());
-            $TopicForm->setData($request->getPost());            
+            
+            $topicFilter    = new TopicFilter();
+			$TopicForm->setInputFilter($topicFilter);
+			$TopicForm->setData($request->getPost());
+            
             if ($TopicForm->isValid()) {
+                
+                $topic = new Topic();
                 $topic->exchangeArray($TopicForm->getData());
-                $this->getTopicTable()->saveTopic($topic);
-                $this->getTopicTable()->deleteTopicTechnologyRelation($topic_id);
-                foreach($request->getPost()->technologies as $technologyID){
-                    $this->getTopicTable()->saveTopicTechnologyRelation($topic_id,$technologyID);
+                
+                $this->topicTable->updateTopic($topic);
+                $this->topicTable->deleteSkillByTopic($topic_id);
+                foreach($request->getPost()->skill as $skillID){
+                    $this->topicTable->saveSkillByTopic($topic_id, $skillID);
                 }
                 // Redirect to list of topic
                 return $this->redirect()->toRoute('topic');
             }
             
-        }                
-        return array(
-                'topic_id'  =>  $topic_id,
-                'form'      =>  $TopicForm
-            );
+        }
+        
+        return array('topic_id'  =>  $topic_id, 'form' => $TopicForm,);
     }
 
-    public function deleteAction()
-    {
+    public function deleteAction() {
         return new ViewModel();
     }
-
-    public function getTechnologyList(){
-        $technologiesValues =   $this->getTechnologyTable()->fetchAll(); // get the technology names
-        $technologyArray    =   array();
-        foreach($technologiesValues as  $technology){
-            $technologyArray[$technology["id"]]     =   $technology["technology"];        
-        }
-        return $technologyArray;
-    }
-
-    public function getTopicTable()
-    {       
-        if (!$this->topicTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->topicTable = $sm->get('ManageComponent\Model\TopicTable');
-        }
-        return $this->topicTable;
-    }
-    public function getTechnologyTable()
-    {       
-        if (!$this->technologyTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->technologyTable = $sm->get('ManageComponent\Model\TechnologyTable');           
-        }
-        return $this->technologyTable;
-    }
+    
     public function getAuthService() {
         if (! $this->authservice) {
             $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');

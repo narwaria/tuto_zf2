@@ -1,7 +1,13 @@
 <?php echo $this->doctype(); ?>
-
-<html lang="en">
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> 
+<html class="no-js"> <!--<![endif]-->
     <head>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
         <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
@@ -9,52 +15,121 @@
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
         ?>
-
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/main.css')
+                        
+                        
+                        ->prependStylesheet($this->basePath() . '/css/font-awesome.min.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
-
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        
+                         ?>
+   
         <!-- Scripts -->
         <?php echo $this->headScript()
+            ->prependFile($this->basePath() . '/js/app.js')
             ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-            ->prependFile($this->basePath() . '/js/jquery.min.js')
-            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath() . '/js/modernizr-2.6.2-respond-1.1.0.min.js')
+            ->prependFile($this->basePath() . '/js/jquery-1.11.0.min.js')
+            
+                   
+            //->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            //->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
         ; ?>
-
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
     </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Skeleton Application') ?></a>
-                </div>
-                
-            </div>
-        </nav>
-        <div class="container">  
-            <div class="col-sm-3">
-                <div class="collapse navbar-collapse">   
+<!--[if lt IE 7]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]--> 
+<!-- BEGIN HEADER -->
+<body class="bg-dashboard page-header-fixed">
+<div role="navigation" id="io-navbar" class="header navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a href="#" class="navbar-brand"><img src="<?php echo $this->basePath('images/logo-io-s.png'); ?>" alt="Interview Organiser"></a> </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome Admin <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Account Settings</a></li>
+          <li><a href="#">Help</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Logout</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<?php  ?>
+<?php 
+  //print_r($this->myvar); die;
+//echo $this->special_purpose(); ?>
+<!-- END HEADER -->
+<div class="clearfix"></div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container"> 
+  <!-- BEGIN SIDEBAR -->
+  <div class="page-sidebar-wrapper">
+    <div class="page-sidebar navbar-collapse collapse">
+      <ul class="page-sidebar-menu">
+        <li class="sidebar-toggler-wrapper"> 
+          <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+          <div class="sidebar-toggler"></div>
+          <div class="clearfix"></div>
+          <!-- BEGIN SIDEBAR TOGGLER BUTTON --> 
+        </li>
+        <li class=""> <a href="javascript:;"><i class="fa fa-users"></i><span class="title">User Management</span><span class="arrow"></span></a>
+          <ul class="sub-menu">
+            <li><a href="#"><i class="icon-anchor"></i>Manage User</a></li>
+            <li><a href="#"><i class="icon-book-open"></i>Manage Role</a></li>
+            <li><a href="#"><i class="icon-pin"></i>Change Password</a></li>
+          </ul>
+        </li>
+        <li> <a href="javascript:;"><i class="fa fa-cubes"></i><span class="title">Component</span><span class="arrow"></span></a>
+          <ul class="sub-menu">
+            <li><a href="#"><i class="icon-anchor"></i>Manage Department</a></li>
+            <li><a href="#"><i class="icon-book-open"></i>Manage Designation</a></li>
+            <li><a href="#"><i class="icon-pin"></i>Manage Technologies</a></li>
+            <li><a href="#"><i class="icon-pin"></i>Manage Topics</a></li>
+          </ul>
+        </li>
+        <li> <a href="javascript:;"><i class="fa fa-question-circle"></i><span class="title">Question Bank</span><span class="arrow"></span></a>
+          <ul class="sub-menu">
+            <li><a href="#"><i class="icon-anchor"></i>Manage Question</a></li>
+          </ul>
+        </li>
+        <li> <a href="javascript:;"><i class="fa fa-user"></i><span class="title">Interview</span><span class="arrow"></span></a>
+          <ul class="sub-menu">
+            <li><a href="#"><i class="icon-anchor"></i>Interview Sets</a></li>
+            <li><a href="#"><i class="icon-book-open"></i>Scheduled Interview</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+<!-- END SIDEBAR --> 
+<!-- BEGIN CONTENT -->
 
-                        <?php
-                            //$this->navigation()->menu()->setPartial('navigation/partials/menu');
-                         echo $this->navigation('navigation')->menu()->setUlClass('nav'); ?>                    
-                </div> 
-            </div>
-            <div class="col-sm-9">          
-              <?php echo $this->content; ?>   
-            </div>         
-            <footer>
-                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
-            </footer>
-        </div> <!-- /container -->
+<div class="page-content-wrapper">
+    <div class="page-content">
+  <?php  echo $this->content; ?>
+    </div>
+</div>
+<!-- END CONTENT --> 
+</div>
+<!-- END CONTAINER --> 
+<!-- BEGIN FOOTER -->
+<div class="footer">
+  <div class="footer-inner">&copy; Interview Organiser</div>
+</div>
+<!-- END FOOTER -->  
+<script>
+jQuery(document).ready(function() {    
+   App.init();
+   $('.page-sidebar-menu li a:first').trigger('click');
+});
+</script>
         <?php echo $this->inlineScript() ?>
     </body>
 </html>

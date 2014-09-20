@@ -10,38 +10,42 @@ use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
 class DashboardController extends AbstractActionController
 {
+    protected $deptTable;
+    protected $desigTable;
+    protected $skillTable;
     protected $topicTable;
     protected $categoryTable;
     protected $authservice;
-    public function indexAction()
-    {
+    
+    public function indexAction() {
+		
+		$this->deptTable	= $this->getServiceLocator()->get('DepartmentTable'); 
+		$this->desigTable	= $this->getServiceLocator()->get('DesignationTable');
+		$this->skillTable	= $this->getServiceLocator()->get('SkillTable'); 
+		$this->topicTable	= $this->getServiceLocator()->get('TopicTable');
         
         $authResponse = $this->getAuthService()->getStorage()->read();
 
-
     	$ConfigMenu = $this->getServiceLocator()->get('Config');
-        //$this->getServiceLocator()->get('TopicTableGateway');
-        
-    	
-        //$topic= new TopicTable();
-        $departmentsCount    = $this->getCategoryTable()->getdepartmentCount();
-        $designationsCount   = $this->getCategoryTable()->getdesignationCount();
-        
-         $topicsCount = $this->getTopicTable()->gettopicCount();         
-
-        $components = array("Department" => isset($departmentsCount->departments_count)?$departmentsCount->departments_count:0,
-                            "Designation"=> isset($designationsCount->designations_count)?$designationsCount->designations_count:0,
-                            "Technology"=>0,
-                            "Topic"=>isset($topicsCount)?$topicsCount:0);
+      
+        $deptCount	= $this->deptTable->getDeptCount();
+        $desigCount	= $this->desigTable->getDesigCount();
+        $skillsCount= $this->skillTable->getSkillCount();
+        $topicsCount= $this->topicTable->getTopicCount();
         
 
+        $components = array("Department" => $deptCount?$deptCount:0,
+                            "Designation"=> $desigCount?$desigCount:0,
+                            "Skill"=> $skillsCount?$skillsCount:0,
+                            "Topic"=> $topicsCount?$topicsCount:0);
+        
+        $topics = $this->topicTable->fetchAll();
+        
+        $this->layout()->setVariable('auth',$authResponse);
+    	$this->layout('layout/dashboard'); 
 
-        $topics = $this->getTopicTable()->fetchAll();
-
-
-    	$this->layout()->setVariable('auth',$authResponse);
-    	$this->layout('layout/dashboard');                
-        return new ViewModel(array("topics"=>$topics,'components'=>$components,'auth'=>$authResponse));
+        return new ViewModel(array('topics'=>$topics,'components'=>$components,'auth'=>$authResponse));
+        
     }
 
     public function getAuthService() {
@@ -55,21 +59,5 @@ class DashboardController extends AbstractActionController
         return $this->authservice;
     }
     
-    public function getTopicTable()
-    {       
-        if (!$this->topicTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->topicTable = $sm->get('ManageComponent\Model\TopicTable');
-        }        
-        return $this->topicTable;
-    } 
-    public function getCategoryTable()
-    {       
-        if (!$this->categoryTable) {            
-            $sm = $this->getServiceLocator();          
-            $this->categoryTable = $sm->get('ManageComponent\Model\CategoryTable');
-        }        
-        return $this->categoryTable;
-    }  
 
 }

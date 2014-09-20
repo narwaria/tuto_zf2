@@ -1,0 +1,103 @@
+<?php
+$title = 'Manage Skill';
+$this->headTitle($title);
+?>
+<h1 class="page-title"><?php echo $this->escapeHtml($title); ?></h1>
+
+<div class="page-bar">
+  <ul class="page-breadcrumb">
+    <li><i class="fa fa-home"></i><a href="/dashboard">Home</a><i class="fa fa-angle-right"></i></li>
+    <!--<li><a href="#">Component Management</a><i class="fa fa-angle-right"></i></li>-->
+    <li>Manage Skill</li>
+  </ul>
+</div>
+
+<div class="io-search-filter row">
+  <div class="col-xs-6 col-sm-6">
+    <h3>Search</h3>
+  </div>
+  <div class="col-xs-6 col-sm-6 text-right"><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Show / Hide</a></div>
+</div>
+
+<div class="io-filter-block panel-collapse collapse in" id="collapseOne">
+  <div class="row">
+    <?php 
+      $form = $this->form;
+      $form->setAttribute('action', $this->url('skill'));
+      $form->prepare();
+
+      echo $this->form()->openTag($form);
+      
+	?>
+      
+    <div class="col-xs-12 col-sm-4 col-md-2">
+        <label>Search Term</label>
+        <?php echo $this->formElement($form->get('skill_name')); ?>
+    </div>
+    
+    <div class="col-xs-12 col-sm-2 col-md-2">
+      <label>&nbsp;</label>
+      <div class="form-group">
+        <?php //echo $this->formElement($form->get('submit')); ?>
+        <button class="btn btn-io" type="submit">Search</button>
+      </div>
+    </div>
+    
+    <?php echo $this->form()->closeTag(); ?>
+    
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12 col-sm-12 text-right">
+    <a href="<?php echo $this->url('skill', array('action' => 'add'));?>" class="btn btn-default">Add Skill</a>
+  </div>
+</div>
+
+<div class="row mt-10">
+  <div class="col-xs-12 col-sm-12">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="text-center" width="10%">S. No.</th>
+            <th width="75%">Skill</th>
+            <th width="15%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php
+        if($this->skills) :
+            $i=1;
+            foreach ($this->skills as $skill) :
+        ?>
+          <tr>
+            <td class="text-center"><?php echo $i; ?></td>
+            <td><?php echo $this->escapeHtml($skill->skill_name); ?></td>
+            <td>
+                <ul class="quick-links">
+                    <li><a href="<?php echo $this->url('skill', array('action' => 'edit', 'skill_id' => $skill->skill_id)); ?>"><i class="fa fa-edit"></i>Edit</a></li>
+                    <li><a href="<?php echo $this->url('skill', array('action' => 'delete', 'skill_id' => $skill->skill_id)); ?>"><i class="fa fa-trash-o"></i>Delete</a></li>
+                </ul>
+            </td>
+          </tr>
+        <?php
+            $i++;
+            endforeach;
+        endif; 
+        ?>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination-wrap">
+    <?php // add at the end of the file after the table
+        echo $this->paginationControl(
+            $this->skills,
+            'Sliding',
+            array('paginator.phtml', 'Skill'), 
+            array('route' => 'skill', 'query'=>'&skill_name='.$this->skill_name)
+        );
+    ?>
+    </div>
+  </div>
+</div>

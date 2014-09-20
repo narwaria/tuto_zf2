@@ -1,3 +1,4 @@
+<?php //print_r($this->auth["UserPermissions"]); ?>
 <!-- BEGIN SIDEBAR --> 
  <div class="page-sidebar-wrapper">
     <div class="page-sidebar navbar-collapse collapse">
@@ -8,32 +9,38 @@
           <div class="clearfix"></div>
           <!-- BEGIN SIDEBAR TOGGLER BUTTON --> 
         </li>
+        <?php if($this->auth["client_id"]==0) : ?>
         <li class=""> <a href="javascript:;"><i class="fa fa-users"></i><span class="title">User Management</span><span class="arrow"></span></a>
           <ul class="sub-menu">
-            <li><a href="#"><i class="icon-anchor"></i>Manage User</a></li>
-            <li><a href="#"><i class="icon-book-open"></i>Manage Role</a></li>
-            <li><a href="#"><i class="icon-pin"></i>Change Password</a></li>
+            <li><a href="<?php echo $this->url('manageuser',array('controller' => 'UserManager','action'=>'index')); ?>"><i class="icon-anchor"></i>Manage User</a></li>          
           </ul>
         </li>
+      <?php endif; ?>
+      <?php if( (array_intersect(array(1,2), (array)$this->auth["UserPermissions"])) || ($this->auth["client_id"]==0)) : ?> 
         <li> <a href="javascript:;"><i class="fa fa-cubes"></i><span class="title">Component</span><span class="arrow"></span></a>
           <ul class="sub-menu">
-            <li><a href="#"><i class="icon-anchor"></i>Manage Department</a></li>
-            <li><a href="#"><i class="icon-book-open"></i>Manage Designation</a></li>
-            <li><a href="#"><i class="icon-pin"></i>Manage Technologies</a></li>
+            <li><a href="<?php echo $this->url('department'); ?>"><i class="icon-anchor"></i>Manage Department</a></li>
+            <li><a href="<?php echo $this->url('designation'); ?>"><i class="icon-book-open"></i>Manage Designation</a></li>
+            <li><a href="<?php echo $this->url('skill'); ?>"><i class="icon-pin"></i>Manage Skills</a></li>
             <li><a href="<?php echo $this->url('topic',array('controller' => 'ManageComponent','action'=>'index')); ?>"><i class="icon-pin"></i>Manage Topics</a></li>
           </ul>
         </li>
+      <?php endif; ?> 
+      <?php if( (array_intersect(array(3,4), (array)$this->auth["UserPermissions"])) || ($this->auth["client_id"]==0)) : ?> 
         <li> <a href="javascript:;"><i class="fa fa-question-circle"></i><span class="title">Question Bank</span><span class="arrow"></span></a>
           <ul class="sub-menu">
             <li><a href="#"><i class="icon-anchor"></i>Manage Question</a></li>
           </ul>
         </li>
+      <?php endif; ?> 
+      <?php if( (array_intersect(array(5,6), (array)$this->auth["UserPermissions"])) || ($this->auth["client_id"]==0)) : ?> 
         <li> <a href="javascript:;"><i class="fa fa-user"></i><span class="title">Interview</span><span class="arrow"></span></a>
           <ul class="sub-menu">
             <li><a href="#"><i class="icon-anchor"></i>Interview Sets</a></li>
             <li><a href="#"><i class="icon-book-open"></i>Scheduled Interview</a></li>
           </ul>
         </li>
+       <?php endif; ?>  
       </ul>
     </div>
   </div>

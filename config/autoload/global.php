@@ -13,7 +13,7 @@
 
 return array(
 	'interview_constants'=>array(
-		'default_login_attempts'		=>	3,
+		'default_login_attempts'	=>	3,
 		'default_pager_elements'	=>	10,
 		'default_date_format'		=>	'dd-mm-YYYY',
 		'default_max_options'		=>	6,
@@ -29,6 +29,14 @@ return array(
 		'7'=>'Manage Question',
 		'8'=>'Interview Set',
 		'9'=>'Scheduled Interview'
+		),
+	'user_permission'=>array(
+		'1'=>'Manage Component (View)',
+		'2'=>'Manage Component (Full)',
+		'3'=>'Manage Question (View)',
+		'4'=>'Manage Question (Full)',
+		'5'=>'Manage Interview (View)',
+		'6'=>'Manage Interview (Full)'		
 		),
 	'module_layouts' => array(
        'Application' => 'layout/layout.phtml',
